@@ -3,7 +3,8 @@ import React from 'react'
 const buy = () => {
   return (
     <div>
-      <p>rohit</p>
+    
+<p></p>
     </div>
   )
 }

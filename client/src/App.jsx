@@ -10,7 +10,7 @@ import Cart from './pages/Cart'
 import Sell from './pages/Sell'
 import Myorder from './pages/Myorder'
 import {Toaster} from 'react-hot-toast'
-import Footer from './components/footer'
+import Footer from './components/Footer'
 
 const App = () => {
 
