@@ -2,7 +2,7 @@
 import React from 'react';
 import { dummyShowsData } from '../assets/assets';
 import FarmerCard from '../components/Farmercard';
-import BlurCircle from '../components/blurcircle';
+import BlurCircle from '../components/Blurcircle';
 
 
 const Buy = () => {
