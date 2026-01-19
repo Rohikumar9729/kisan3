@@ -4,7 +4,7 @@ const buy = () => {
   return (
     <div>
 
-<p>rohit</p>
+<p>rt</p>
 
     </div>
 
