@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import Blurcircle from './blurcircle'
+import Blurcircle from './Blurcircle'
 import { dummyShowsData } from '../assets/assets' 
 import FarmerCard from './Farmercard'              
 const Feature = () => {
