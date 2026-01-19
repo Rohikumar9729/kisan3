@@ -1,7 +1,7 @@
 import React from 'react';
-import FarmerSection from '../components/farmersection';   
+import FarmerSection from '../components/Farmersection';   
 import Feature from '../components/Feature';
-import Recommended from '../components/recommended';
+import Recommended from '../components/Recommended';
 const Home = () => {                
   return (
     <>
