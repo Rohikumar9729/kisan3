@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {  dummyvideo } from '../assets/assets'
 import ReactPlayer from'react-player'
-import Blurcircle from './blurcircle'
+import Blurcircle from './Blurcircle'
 import { PlayCircleIcon } from 'lucide-react'
 
 const Recommended = () => {
