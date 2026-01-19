@@ -4,7 +4,7 @@ const buy = () => {
   return (
     <div>
 
-<p>rt</p>
+<p>hitman</p>
 
     </div>
 
