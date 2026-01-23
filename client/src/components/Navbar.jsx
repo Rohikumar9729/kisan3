@@ -61,6 +61,7 @@ const Navbar = () => {
             <UserButton>
               <UserButton.MenuItems>
                 <UserButton.Action label="Myorder" labelIcon={<TicketPlus width={15} /> } onClick={()=>navigate('/Myorder')} />
+                <UserButton.Action label="Mycart" labelIcon={<TicketPlus width={15} /> } onClick={()=>navigate('/Cart')} />
               </UserButton.MenuItems>
             </UserButton>
           )

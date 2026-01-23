@@ -67,7 +67,8 @@ export const dummyShowsData = [
             { "id": 12, "name": "high demand" }
         ],
         "casts": dummyCastsData,
-        "price":"60/kg -50% off on ₹120",
+        "dummyprice":"₹120/kg",
+        "price":"₹60/kg",
         "tagline": "She seeks the power to free her people.",
         "vote_average": 6.4,
         "vote_count": 15000,
@@ -85,7 +86,8 @@ export const dummyShowsData = [
             { "id": 9648, "name": "best quality" }
         ],
         "casts": dummyCastsData,
-        "price":"50/kg -50% off on ₹100",
+        "dummyprice":"₹100/kg",
+        "price":"₹50/kg ",
         "tagline": "Every night a different nightmare.",
         "vote_average": 6.405,
         "vote_count": 18000,
@@ -104,7 +106,8 @@ export const dummyShowsData = [
             { "id": 878, "name": "high demand" }
         ],
         "casts": dummyCastsData,
-        "price":"90/kg -50% off on ₹180",
+        "dummyprice":"₹180/kg",
+        "price":"₹90/kg",
         
         "tagline": "Hold on to your coconuts.",
         "vote_average": 7.117,
@@ -144,7 +147,8 @@ export const dummyShowsData = [
            
         ],
         "casts": dummyCastsData,
-        "price":"100/kg -50% off on ₹200",
+        "dummyprice":"₹200/kg",
+        "price":"₹100/kg",
         "tagline": "Be there and be square.",
         "vote_average": 6.516,
         "vote_count": 15225,
@@ -163,7 +167,8 @@ export const dummyShowsData = [
             { "id": 53, "name": "high demand" }
         ],
         "casts": dummyCastsData,
-        "price":"70/kg -50% off on ₹140",
+        "dummyprice":"₹180/kg",
+        "price":"₹90/kg",
         "tagline": "Our lives are the sum of our choices.",
         "vote_average": 7.042,
         "vote_count": 19885,
