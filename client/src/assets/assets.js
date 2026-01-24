@@ -57,7 +57,7 @@ export const dummyShowsData = [
     {
         "_id": "324544",
         "id": 324544,
-        "title": "Rice",
+        "title": "Rice seeds",
         "overview": "Rice is a fundamental cereal grain and staple food for over half the world's population, providing essential energy as a complex carbohydrate, with thousands of varieties cultivated globally for millennia, especially across Asia, and used in diverse dishes, cereals, and beverages.",
         "poster_path": "https://m.media-amazon.com/images/I/81Voy6TeZtL._AC_UF1000,1000_QL80_.jpg",
         "backdrop_path": "https://m.media-amazon.com/images/I/81Voy6TeZtL._AC_UF1000,1000_QL80_.jpg",
@@ -77,7 +77,7 @@ export const dummyShowsData = [
     {
         "_id": "1232546",
         "id": 1232546,
-        "title": "pumpkin",
+        "title": "pumpkin seeds",
         "overview": "A pumpkin is a nutritious, versatile winter squash from the gourd family, known for its round, orange form but existing in many colors and sizes, botanically a fruit but used as a vegetable, rich in Vitamin A and antioxidants, and a staple for autumn decorations (jack-o'-lanterns) and dishes like pies, soups, and roasted seeds",
         "poster_path": "https://www.mevabite.com/cdn/shop/articles/natural-pumpkin-seeds.jpg?v=1725512969",
         "backdrop_path": "https://www.mevabite.com/cdn/shop/articles/natural-pumpkin-seeds.jpg?v=1725512969",
@@ -96,7 +96,7 @@ export const dummyShowsData = [
     {
         "_id": "552524",
         "id": 552524,
-        "title": "chilly",
+        "title": "chilly seeds",
         "overview": "Chilies are the spicy, colorful fruits of Capsicum plants, botanically berries from the nightshade family, known for their heat from capsaicin, used fresh, dried, or powdered globally in cuisines like Indian, Thai, and Mexican for flavor, color, and medicinal properties, with India being a top producer, valued for vitamins and antioxidants, and famously hotter near the seeds and membrane.",
         "poster_path": "https://www.pepperhub.in/wp-content/uploads/2023/08/green-chilli-seeds.webp",
         "backdrop_path": "https://www.pepperhub.in/wp-content/uploads/2023/08/green-chilli-seeds.webp",
@@ -117,7 +117,7 @@ export const dummyShowsData = [
     {
         "_id": "668489",
         "id": 668489,
-        "title": "wheat",
+        "title": "wheat seeds",
         "overview": "Wheat is a globally significant cereal grain from the Triticum grass genus, a staple food providing carbs, protein, fiber, vitamins, and minerals, ground into flour for breads, pasta, and baked goods, or used for animal feed, beverages, and industrial products",
         "poster_path": "https://5.imimg.com/data5/BZ/VF/EL/SELLER-75729806/wheat.jpg",
         "backdrop_path": "https://5.imimg.com/data5/BZ/VF/EL/SELLER-75729806/wheat.jpg",
@@ -127,7 +127,8 @@ export const dummyShowsData = [
             { "id": 53, "name": "high demand" }
         ],
         "casts": dummyCastsData,
-        "price":"80/kg -50% off on ₹160",
+        "dummyprice":"₹80/kg",
+        "price":"₹40/kg",
         "tagline": "No law. Only disorder.",
         "vote_average": 6.537,
         "vote_count": 35960,
@@ -136,7 +137,7 @@ export const dummyShowsData = [
     {
         "_id": "950387",
         "id": 950387,
-        "title": "Onion",
+        "title": "Onion seeds",
         "overview": "An onion (Allium cepa) is a pungent, edible bulb vegetable from the amaryllis family, related to garlic and leeks, known for its use in cooking worldwide, with strong flavors from sulfur compounds",
         "poster_path": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKDDyVHxrktD0CP9_QZ1j9LsH9q6ws77SGzA&s",
         "backdrop_path": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKDDyVHxrktD0CP9_QZ1j9LsH9q6ws77SGzA&sg",
@@ -155,9 +156,49 @@ export const dummyShowsData = [
         "runtime": 101,
     },
     {
+        "_id": "668469",
+        "id": 668489,
+        "title": "Cauliflower seeds",
+        "overview": "Cauliflower is a versatile cruciferous vegetable, related to broccoli and cabbage, known for its nutritious white curd (a mass of flower buds) and being low in calories, fat-free, gluten-free, and rich in vitamins C & K, folate, fiber, and antioxidants like glucosinolates",
+        "poster_path": "https://vgrgardens.com/wp-content/uploads/2024/11/cauliflower-seeds-500x500-1.webp",
+        "backdrop_path": "https://vgrgardens.com/wp-content/uploads/2024/11/cauliflower-seeds-500x500-1.webp",
+        "seed": [
+            { "id": 28, "name": "cereal crop" },
+            { "id": 80, "name": "best quality" },
+            { "id": 53, "name": "high demand" }
+        ],
+        "casts": dummyCastsData,
+        "dummyprice":"₹80/kg",
+        "price":"₹40/kg",
+        "tagline": "No law. Only disorder.",
+        "vote_average": 6.537,
+        "vote_count": 35960,
+        
+    },
+    {
+        "_id": "668479",
+        "id": 668489,
+        "title": "Gram seeds",
+        "overview": "Gram seeds are nutrient-rich, protein-packed legumes (like chickpeas or green gram) grown for food, known for drought tolerance and improving soil fertility",
+        "poster_path": "https://tiimg.tistatic.com/fp/1/008/020/excellent-source-of-vitamin-b-complex-nutrition-dried-gram-seed--409.jpg",
+        "backdrop_path": "https://tiimg.tistatic.com/fp/1/008/020/excellent-source-of-vitamin-b-complex-nutrition-dried-gram-seed--409.jpg",
+        "seed": [
+            { "id": 28, "name": "cereal crop" },
+            { "id": 80, "name": "best quality" },
+            { "id": 53, "name": "high demand" }
+        ],
+        "casts": dummyCastsData,
+        "dummyprice":"₹180/kg",
+        "price":"₹90/kg",
+        "tagline": "No law. Only disorder.",
+        "vote_average": 6.537,
+        "vote_count": 35960,
+        
+    },
+    {
         "_id": "575265",
         "id": 575265,
-        "title": "Potato",
+        "title": "Potato seeds",
         "overview": "",
         "poster_path": "https://i0.wp.com/www.potatonewstoday.com/wp-content/uploads/2023/06/TPS-Kashmir.jpg?fit=1033%2C550&ssl=1",
         "backdrop_path": "https://i0.wp.com/www.potatonewstoday.com/wp-content/uploads/2023/06/TPS-Kashmir.jpg?fit=1033%2C550&ssl=1",

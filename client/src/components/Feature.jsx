@@ -20,8 +20,8 @@ const Feature = () => {
         </button>
       </div>
 
-      <div className="flex flex-wrap max-sm:justify-center gap-8 mt-8">
-        {dummyShowsData.slice(0, 6).map((product) => (
+      <div className="flex flex-wrap max-sm:justify-center gap-8 mt-8 pl-9">
+        {dummyShowsData.slice(0, 8).map((product) => (
           <FarmerCard key={product._id } product={product} />
         ))}
       </div>

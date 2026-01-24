@@ -43,7 +43,7 @@ const Navbar = () => {
         <Link onClick={() => { window.scrollTo(0, 0); closeMenu(); }} to="/">Home</Link>
         <Link onClick={() => { window.scrollTo(0, 0); closeMenu(); }} to="/Buy">Buy</Link>
         <Link onClick={() => { window.scrollTo(0, 0); closeMenu(); }} to="/Sell">Sell</Link>
-        <Link onClick={() => { window.scrollTo(0, 0); closeMenu(); }} to="/Footer">Contactus</Link>
+        <Link onClick={() => { window.scrollTo(0, 0); closeMenu(); }} to="/Contactus">Contact us</Link>
       </div>
 
       <div className="flex items-center gap-8">

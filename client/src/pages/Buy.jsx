@@ -22,7 +22,15 @@ const Buy = () => {
             {dummyShowsData.map((product) => (
               <FarmerCard key={product._id || product.id} product={product} />
             ))}
+            <div className='flex justify-center mt-20'>
+     <button onClick={() => {navigate(`/product`);scrollTo(0, 0) }}
+     className='px-10 py-3 text-sm bg-primary hover:bg-primary-dull
+     transition rounded-md font-medium cursor-pointer'
+     style={{ backgroundColor: '#CEC382' }}
+     >Show More</button>
+     </div>
           </div>
+          
         ) : (
           <p className="text-center text-xl text-gray-500">No products available right now.</p>
         )}

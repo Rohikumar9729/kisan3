@@ -16,7 +16,7 @@ const Recommended = () => {
       <div className='relative mt-6'>
         <Blurcircle top='-100' right='-100px'/>
         <ReactPlayer src={currentTechnique.videoUrl} controls={false} 
-        className="mx-auto max-w-full" width="960px" height="540px"  />
+        className="mx-auto max-w-full rounded-lg" width="960px" height="540px"  />
       </div>
     
     <div className='group grid grid-cols-4 gap-4 md:gap-8 mt-8 max-w-3xl mx-auto'>
