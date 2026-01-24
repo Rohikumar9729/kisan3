@@ -27,7 +27,7 @@ const Buy = () => {
      className='px-10 py-3 text-sm bg-primary hover:bg-primary-dull
      transition rounded-md font-medium cursor-pointer'
      style={{ backgroundColor: '#CEC382' }}
-     >Show More</button>
+     >Show </button>
      </div>
           </div>
           
