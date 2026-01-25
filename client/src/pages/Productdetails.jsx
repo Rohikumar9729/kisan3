@@ -4,6 +4,7 @@ import BlurCircle from '../components/Blurcircle';
 import {  Heart, PlayCircleIcon, StarIcon } from 'lucide-react';
 import { dummyShowsData } from '../assets/assets';
 import FarmerCard from '../components/Farmercard';
+import Loading from '../components/Loading';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -12,13 +13,14 @@ const ProductDetails = () => {
   const navigate=useNavigate()
 
   useEffect(() => {
-    
     const found = dummyShowsData.find((item) => item._id === id);
-    setProduct(found); 
+    if (found) {
+      setProduct(found);
+    }
   }, [id]);
 
   if (!product) {
-    return <div className="text-center py-20 text-xl">Loading...</div>;
+    return <Loading />;
   }
 
   return (
@@ -33,20 +35,20 @@ const ProductDetails = () => {
             className="rounded-xl w-full max-w-[500px] mx-auto md:mx-0 object-cover shadow-2xl"
           />
           <p className='mt-3'>Related image</p>
-           <div class="flex flex-row gap-5 mt-5">
-                <div class="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer">
+           <div className="flex flex-row gap-5 mt-5">
+                <div className="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer">
                     <img onClick={() => {navigate(`/product/${product._id}`);scrollTo(0, 0) }}
                     src={product.poster_path} />
                 </div>
-                <div class="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer">
+                <div className="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer">
                     <img onClick={() => {navigate(`/product/${product._id}`);scrollTo(0, 0) }}
                     src={product.poster_path} />
                 </div>
-                <div class="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer">
+                <div className="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer">
                     <img onClick={() => {navigate(`/product/${product._id}`);scrollTo(0, 0) }}
                     src={product.poster_path} />
                 </div>
-                <div class="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer">
+                <div className="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer">
                     <img onClick={() => {navigate(`/product/${product._id}`);scrollTo(0, 0) }}
                     src={product.poster_path} />
                 </div>
@@ -74,10 +76,10 @@ const ProductDetails = () => {
             {product.overview || product.description || 'No description available.'}
           </p>
 
-          <div class="mt-6">
-                <p class="text-gray-500/70 line-through">MRP:{product.dummyprice}</p>
-                <p class="text-2xl font-medium">MRP:{product.price}</p>
-                <span class="text-gray-500/70">(inclusive of all taxes)</span>
+          <div className="mt-6">
+                <p className="text-gray-500/70 line-through">MRP:{product.dummyprice}</p>
+                <p className="text-2xl font-medium">MRP:{product.price}</p>
+                <span className="text-gray-500/70">(inclusive of all taxes)</span>
             </div>
           <div>
             <button  className='flex items-center cursor-pointer'>
@@ -96,7 +98,7 @@ const ProductDetails = () => {
         >Buy Now</a>
              <button className='bg-gray-700 p-2.5 rounded-full transition cursor-pointer
              active:scale-95'>
-              <Heart classNmae={`w-5 h-5`}/>
+              <Heart className={`w-5 h-5`}/>
              </button>
           </div>
          
@@ -117,7 +119,7 @@ const ProductDetails = () => {
      </div>
 
     </div>
-  )
+  );
 }
 
 export default ProductDetails;

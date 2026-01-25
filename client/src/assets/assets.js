@@ -33,25 +33,7 @@ export const dummyvideo = [
     },
 ]
 
-const dummyCastsData = [
-    { "name": "Milla Jovovich", "profile_path": "https://image.tmdb.org/t/p/original/usWnHCzbADijULREZYSJ0qfM00y.jpg", },
-    { "name": "Dave Bautista", "profile_path": "https://image.tmdb.org/t/p/original/snk6JiXOOoRjPtHU5VMoy6qbd32.jpg", },
-    { "name": "Arly Jover", "profile_path": "https://image.tmdb.org/t/p/original/zmznPrQ9GSZwcOIUT0c3GyETwrP.jpg", },
-    { "name": "Amara Okereke", "profile_path": "https://image.tmdb.org/t/p/original/nTSPtzWu6deZTJtWXHUpACVznY4.jpg", },
-    { "name": "Fraser James", "profile_path": "https://image.tmdb.org/t/p/original/mGAPQG2OKTgdKFkp9YpvCSqcbgY.jpg", },
-    { "name": "Deirdre Mullins", "profile_path": "https://image.tmdb.org/t/p/original/lJm89neuiVlYISEqNpGZA5kTAnP.jpg", },
-    { "name": "Sebastian Stankiewicz", "profile_path": "https://image.tmdb.org/t/p/original/hLN0Ca09KwQOFLZLPIEzgTIbqqg.jpg", },
-    { "name": "Tue Lunding", "profile_path": "https://image.tmdb.org/t/p/original/qY4W0zfGBYzlCyCC0QDJS1Muoa0.jpg", },
-    { "name": "Jacek Dzisiewicz", "profile_path": "https://image.tmdb.org/t/p/original/6Ksb8ANhhoWWGnlM6O1qrySd7e1.jpg", },
-    { "name": "Ian Hanmore", "profile_path": "https://image.tmdb.org/t/p/original/yhI4MK5atavKBD9wiJtaO1say1p.jpg", },
-    { "name": "Eveline Hall", "profile_path": "https://image.tmdb.org/t/p/original/uPq4xUPiJIMW5rXF9AT0GrRqgJY.jpg", },
-    { "name": "Kamila Klamut", "profile_path": "https://image.tmdb.org/t/p/original/usWnHCzbADijULREZYSJ0qfM00y.jpg", },
-    { "name": "Caoilinn Springall", "profile_path": "https://image.tmdb.org/t/p/original/uZNtbPHowlBYo74U1qlTaRlrdiY.jpg", },
-    { "name": "Jan Kowalewski", "profile_path": "https://image.tmdb.org/t/p/original/snk6JiXOOoRjPtHU5VMoy6qbd32.jpg", },
-    { "name": "Pawel Wysocki", "profile_path": "https://image.tmdb.org/t/p/original/zmznPrQ9GSZwcOIUT0c3GyETwrP.jpg", },
-    { "name": "Simon Lööf", "profile_path": "https://image.tmdb.org/t/p/original/cbZrB8crWlLEDjVUoak8Liak6s.jpg", },
-    { "name": "Tomasz Cymerman", "profile_path": "https://image.tmdb.org/t/p/original/nTSPtzWu6deZTJtWXHUpACVznY4.jpg", }
-]
+
 
 export const dummyShowsData = [
     {
@@ -66,7 +48,7 @@ export const dummyShowsData = [
             { "id": 14, "name": "best quality" },
             { "id": 12, "name": "high demand" }
         ],
-        "casts": dummyCastsData,
+  
         "dummyprice":"₹120/kg",
         "price":"₹60/kg",
         "tagline": "She seeks the power to free her people.",
@@ -85,7 +67,7 @@ export const dummyShowsData = [
             { "id": 27, "name": "Botanically" },
             { "id": 9648, "name": "best quality" }
         ],
-        "casts": dummyCastsData,
+    
         "dummyprice":"₹100/kg",
         "price":"₹50/kg ",
         "tagline": "Every night a different nightmare.",
@@ -105,7 +87,7 @@ export const dummyShowsData = [
             { "id": 35, "name": "best quality" },
             { "id": 878, "name": "high demand" }
         ],
-        "casts": dummyCastsData,
+      
         "dummyprice":"₹180/kg",
         "price":"₹90/kg",
         
@@ -126,7 +108,7 @@ export const dummyShowsData = [
             { "id": 80, "name": "best quality" },
             { "id": 53, "name": "high demand" }
         ],
-        "casts": dummyCastsData,
+       
         "dummyprice":"₹80/kg",
         "price":"₹40/kg",
         "tagline": "No law. Only disorder.",
@@ -147,7 +129,7 @@ export const dummyShowsData = [
             { "id": 12, "name": "high demand" },
            
         ],
-        "casts": dummyCastsData,
+        
         "dummyprice":"₹200/kg",
         "price":"₹100/kg",
         "tagline": "Be there and be square.",
@@ -167,7 +149,7 @@ export const dummyShowsData = [
             { "id": 80, "name": "best quality" },
             { "id": 53, "name": "high demand" }
         ],
-        "casts": dummyCastsData,
+      
         "dummyprice":"₹80/kg",
         "price":"₹40/kg",
         "tagline": "No law. Only disorder.",
@@ -187,7 +169,7 @@ export const dummyShowsData = [
             { "id": 80, "name": "best quality" },
             { "id": 53, "name": "high demand" }
         ],
-        "casts": dummyCastsData,
+       
         "dummyprice":"₹180/kg",
         "price":"₹90/kg",
         "tagline": "No law. Only disorder.",
@@ -207,7 +189,7 @@ export const dummyShowsData = [
             { "id": 12, "name": "best quality" },
             { "id": 53, "name": "high demand" }
         ],
-        "casts": dummyCastsData,
+       
         "dummyprice":"₹180/kg",
         "price":"₹90/kg",
         "tagline": "Our lives are the sum of our choices.",
@@ -312,44 +294,47 @@ export const dummyDashboardData = {
 }
 
 
-export const dummyBookingData = [
+export const dummyOrderData = [
     {
         "_id": "68396334fb83252d82e17295",
-        "user": { "name": "GreatStack", },
+        "user": { "name": "Farmer", },
         "show": {
             _id: "68352363e96d99513e4221a4",
             product: dummyShowsData[0],
-            
+            showDeliveryTime: "2025-07-24T01:00:00.000Z",
+            DeliveryAddress: "Brahmputra hostel, Nit patna, 800005,bihar"
             
         },
         "amount": 98,
-        "bookedSeats": ["D1", "D2"],
+        "Quantity": ["2"],
         "isPaid": false,
     },
     {
         "_id": "68396334fb83252d82e17295",
-        "user": { "name": "GreatStack", },
+        "user": { "name": "Farmer", },
         "show": {
-            _id: "68352363e96d99513e4221a4",
-            movie: dummyShowsData[0],
-            showDateTime: "2025-06-30T02:30:00.000Z",
-            showPrice: 59,
+            _id: "6835238fe96d99513e4221a8",
+            product: dummyShowsData[1],
+            showDeliveryTime: "2025-07-24T03:00:00.000Z",
+            DeliveryAddress: "Brahmputra hostel, Nit patna, 800005,bihar"
+            
         },
-        "amount": 49,
-        "bookedSeats": ["A1"],
+        "amount": 98,
+        "Quantity": ["2"],
         "isPaid": true,
     },
     {
         "_id": "68396334fb83252d82e17295",
-        "user": { "name": "GreatStack", },
+        "user": { "name": "Farmer", },
         "show": {
-            _id: "68352363e96d99513e4221a4",
-            movie: dummyShowsData[0],
-            showDateTime: "2025-06-30T02:30:00.000Z",
-            showPrice: 59,
+            _id: "6835238fe96d99513e4221a9",
+            product: dummyShowsData[2],
+            showDeliveryTime: "2025-07-24T03:00:00.000Z",
+            DeliveryAddress: "Brahmputra hostel Nit patna, 800005,bihar"    
+            
         },
-        "amount": 147,
-        "bookedSeats": ["A1", "A2","A3"],
+        "amount": 98,
+         "Quantity": ["2"],
         "isPaid": true,
     },
 ]
