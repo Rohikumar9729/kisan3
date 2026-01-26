@@ -3,9 +3,12 @@ import React from 'react';
 import { dummyShowsData } from '../assets/assets';
 import FarmerCard from '../components/Farmercard';
 import BlurCircle from '../components/Blurcircle';
+import { useNavigate } from 'react-router-dom';
 
 
 const Buy = () => {
+
+  const navigate=useNavigate()
   return (
     <div className="relative min-h-screen overflow-visible">   
 
