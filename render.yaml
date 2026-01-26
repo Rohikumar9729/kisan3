@@ -3,8 +3,8 @@ services:
     name: kisan3
     runtime: node
     plan: free
-    buildCommand: npm run build
-    startCommand: npm start
+    buildCommand: npm install && npm run build
+    startCommand: node server.js
     publishDirectory: ./
     envVars:
       - key: NODE_ENV
