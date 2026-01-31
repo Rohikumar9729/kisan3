@@ -1,5 +1,5 @@
 import {inngest} from "inngest";
-import User from "../models/user";
+import User from "../models/User.js";
 
 
 export const inngest=new Inngest({name:"Kisan App "});
