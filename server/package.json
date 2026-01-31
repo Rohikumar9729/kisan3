@@ -12,11 +12,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@clerk/express": "^1.7.67",
     "axios": "^1.13.4",
     "cloudinary": "^2.9.0",
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "inngest": "^3.50.0",
     "mongoose": "^9.1.5"
   },
   "devDependencies": {

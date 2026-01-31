@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "server.js"
+    }
+  ],
+  "env": {
+    "MONGODB_URI": "@mongodb_uri",
+    "CLERK_SECRET_KEY": "@clerk_secret_key",
+    "CLERK_PUBLISHABLE_KEY": "@clerk_publishable_key"
+  }
+}
