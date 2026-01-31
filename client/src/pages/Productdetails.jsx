@@ -89,7 +89,7 @@ const ProductDetails = () => {
           </div>
           
           <div className='flex items-center flex-wrap gap-4 mt-4'>
-            <a href="/Cart" className="px-4 py-2 text-xs bg-[#CEC382] hover:bg-[#b8a56e] 
+            <a href="/admin/Mycart" className="px-4 py-2 text-xs bg-[#CEC382] hover:bg-[#b8a56e] 
             transition rounded-full font-medium cursor-pointer"  
         >Add to cart</a>
              <a href="/Myorder" className="px-4 py-2 text-xs bg-[#CEC382] hover:bg-[#b8a56e] 

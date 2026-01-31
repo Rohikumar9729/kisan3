@@ -142,8 +142,8 @@ export const dummyShowsData = [
         "id": 668489,
         "title": "Cauliflower seeds",
         "overview": "Cauliflower is a versatile cruciferous vegetable, related to broccoli and cabbage, known for its nutritious white curd (a mass of flower buds) and being low in calories, fat-free, gluten-free, and rich in vitamins C & K, folate, fiber, and antioxidants like glucosinolates",
-        "poster_path": "https://vgrgardens.com/wp-content/uploads/2024/11/cauliflower-seeds-500x500-1.webp",
-        "backdrop_path": "https://vgrgardens.com/wp-content/uploads/2024/11/cauliflower-seeds-500x500-1.webp",
+        "poster_path": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlZU4S9P54JNI2zcStNlacvUhPT9RVSA61xw&s",
+        "backdrop_path": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlZU4S9P54JNI2zcStNlacvUhPT9RVSA61xw&s",
         "seed": [
             { "id": 28, "name": "cereal crop" },
             { "id": 80, "name": "best quality" },
@@ -224,10 +224,9 @@ export const dummyDateTimeData = {
 }
 
 export const dummyDashboardData = {
-    "totalbuy": 14,
-    "totalRevenue": 1517,
+    "totalProduct": 14,
     "totalUser": 5,
-    "activeproduct": [
+    "Activeproduct": [
         {
             "_id": "68352363e96d99513e4221a4",
             "product": dummyShowsData[0],

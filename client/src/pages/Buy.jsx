@@ -25,13 +25,14 @@ const Buy = () => {
             {dummyShowsData.map((product) => (
               <FarmerCard key={product._id || product.id} product={product} />
             ))}
-            <div className='flex justify-center mt-20'>
-     <button onClick={() => {navigate(`/product`);scrollTo(0, 0) }}
-     className='px-10 py-3 text-sm bg-primary hover:bg-primary-dull
-     transition rounded-md font-medium cursor-pointer'
-     style={{ backgroundColor: '#CEC382' }}
-     >Show More</button>
-     </div>
+            <div className="flex justify-center mt-16">
+        <button onClick={() => {navigate(`/product`);scrollTo(0, 0) }}
+          className="px-10 py-3 text-sm bg-[#CEC382] hover:bg-[#b8a56e] 
+            transition rounded-md font-medium cursor-pointer ml-4 mr-[20px]"
+        >
+          Show More
+        </button>
+      </div>
           </div>
           
         ) : (
