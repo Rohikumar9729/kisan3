@@ -16,7 +16,7 @@ app.use(clerkMiddleware())
 app.get('/', (req, res) => 
   res.send('server is live !'))
 
-app.use('/api/inngest',serve({client:inngest,funstions}))
+app.use('/api/inngest', serve({ client: inngest, functions }))
 
 
 // Connect to database and start server
