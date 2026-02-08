@@ -3,7 +3,7 @@ import React from 'react'
 const Contactus = () => {
   return (
     <div>
-      <p>contact us</p>
+      <p>contact me</p>
     </div>
   )
 }
