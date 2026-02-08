@@ -22,9 +22,9 @@ const FarmerCard = ({ product }) => {
       <p className="font-semibold mt-2 truncate">{product.title } </p>
 
       <p className="text-sm text-gray-400 mt-1">
-                {product.seed.slice(0,2).map(seed=>seed.name).join("||") }  
-                <p class="text-gray-500/70 line-through">MRP:{product.dummyprice}</p>
-                <p class="text-1xl font-medium">MRP:{product.price}</p>
+        {product.seed.slice(0,2).map(seed=>seed.name).join("||") }
+        <span className="text-gray-500/70 line-through block">MRP:{product.dummyprice}</span>
+        <span className="text-1xl font-medium block">MRP:{product.price}</span>
       </p>
 
       <div className="flex items-center justify-between mt-4 pb-3">
