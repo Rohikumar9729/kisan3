@@ -9,4 +9,15 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     outDir: 'dist',
   },
+  server: {
+    proxy: {
+      // During development, /api/* requests are proxied to the Express server
+      // so you don't need to set CORS headers or use the full URL in fetch calls
+      '/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+      },
+    },
+  },
 })
+

@@ -1,0 +1,16 @@
+{
+  "name": "kisan3",
+  "version": "1.0.0",
+  "description": "Kisan - India's Farmer Marketplace",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently --names \"CLIENT,SERVER\" --prefix-colors \"cyan,yellow\" \"npm run dev --prefix client\" \"npm run server --prefix server\"",
+    "client": "npm run dev --prefix client",
+    "server": "npm run server --prefix server",
+    "install:all": "npm install && npm install --prefix client && npm install --prefix server",
+    "build": "npm run build --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
