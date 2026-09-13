@@ -46,6 +46,7 @@ const Cart = () => {
   // Sync to localStorage
   useEffect(() => {
     localStorage.setItem('kisan_cart', JSON.stringify(cartItems));
+    window.dispatchEvent(new Event('cartUpdated'));
   }, [cartItems]);
 
   const updateQty = (id, delta) => {
@@ -126,6 +127,27 @@ const Cart = () => {
 
       localStorage.setItem('kisan_my_orders', JSON.stringify([...newOrders, ...existingOrders]));
 
+      // Also record as a received buy request for seller notification
+      const existingReceived = JSON.parse(localStorage.getItem('kisan_received_requests') || '[]');
+      const newReceived = cartItems.map((item) => ({
+        _id: 'req_' + Math.random().toString(36).substring(2, 9),
+        product: item,
+        user: {
+          name: user?.name || shippingAddress.split(',')[0] || 'Customer',
+          phone: phone.trim(),
+          email: user?.email || 'buyer@kisan.com',
+        },
+        Quantity: item.qty || 1,
+        amount: cleanPrice(item.price) * (item.qty || 1),
+        DeliveryAddress: `${shippingAddress.trim()} (Phone: ${phone.trim()})`,
+        paymentMethod,
+        isPaid: paymentMethod !== 'COD',
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+      }));
+      localStorage.setItem('kisan_received_requests', JSON.stringify([...newReceived, ...existingReceived]));
+      window.dispatchEvent(new Event('requestReceivedUpdated'));
+
       // Clear cart
       setCartItems([]);
       localStorage.removeItem('kisan_cart');
@@ -151,6 +173,27 @@ const Cart = () => {
       }));
 
       localStorage.setItem('kisan_my_orders', JSON.stringify([...newOrders, ...existingOrders]));
+
+      const existingReceived = JSON.parse(localStorage.getItem('kisan_received_requests') || '[]');
+      const newReceived = cartItems.map((item) => ({
+        _id: 'req_' + Math.random().toString(36).substring(2, 9),
+        product: item,
+        user: {
+          name: user?.name || shippingAddress.split(',')[0] || 'Customer',
+          phone: phone.trim(),
+          email: user?.email || 'buyer@kisan.com',
+        },
+        Quantity: item.qty || 1,
+        amount: cleanPrice(item.price) * (item.qty || 1),
+        DeliveryAddress: `${shippingAddress.trim()} (Phone: ${phone.trim()})`,
+        paymentMethod,
+        isPaid: paymentMethod !== 'COD',
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+      }));
+      localStorage.setItem('kisan_received_requests', JSON.stringify([...newReceived, ...existingReceived]));
+      window.dispatchEvent(new Event('requestReceivedUpdated'));
+
       setCartItems([]);
       localStorage.removeItem('kisan_cart');
       setIsCheckoutOpen(false);
@@ -164,10 +207,10 @@ const Cart = () => {
 
   return (
     <div className="relative overflow-hidden min-h-screen">
-      <BlurCircle top="-5%" left="-10%" />
-      <BlurCircle bottom="5%" right="-10%" />
+      <BlurCircle top="-5%" left="-10%" color="emerald" />
+      <BlurCircle bottom="5%" right="-10%" color="gold" />
 
-      <div className="px-6 md:px-16 lg:px-36 pt-36 pb-28">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-32 sm:pt-36 pb-28">
         <h1 className="text-3xl md:text-4xl font-bold mb-10 flex items-center gap-3 text-white">
           <ShoppingBag className="w-8 h-8 text-[#CEC382]" />
           My Cart

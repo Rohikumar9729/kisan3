@@ -1,7 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import BlurCircle from '../components/Blurcircle';
-import { Heart, PlayCircleIcon, StarIcon, ShoppingBag, ArrowRight, ShieldCheck, Check } from 'lucide-react';
+import {
+  Heart,
+  Star,
+  ShoppingBag,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
+  Truck,
+  Leaf,
+  Calendar,
+  Layers,
+  ChevronRight,
+  Plus,
+  Minus,
+  Sparkles,
+  Share2
+} from 'lucide-react';
 import { dummyShowsData } from '../assets/assets';
 import FarmerCard from '../components/Farmercard';
 import Loading from '../components/Loading';
@@ -15,6 +31,8 @@ const ProductDetails = () => {
   const { isAuthenticated } = useAuth();
 
   const [product, setProduct] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -22,30 +40,32 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
-      // First check in dummyShowsData
       const foundInDummy = dummyShowsData.find((item) => String(item._id) === String(id));
       if (foundInDummy) {
         setProduct(foundInDummy);
+        setSelectedImage(foundInDummy.backdrop_path || foundInDummy.poster_path);
         setLoading(false);
         return;
       }
 
-      // If not in dummy, fetch from MongoDB API
       try {
         const { data } = await api.get(`/api/products/${id}`);
         if (data.success && data.product) {
-          setProduct({
+          const p = {
             ...data.product,
             price: typeof data.product.price === 'string' ? data.product.price.replace(/[^0-9.]/g, '') : data.product.price,
             dummyprice: data.product.dummyprice ? data.product.dummyprice.replace(/[^0-9.]/g, '') : '',
-          });
+          };
+          setProduct(p);
+          setSelectedImage(p.poster_path || p.backdrop_path);
         } else {
-          // Fallback to first dummy product if not found
           setProduct(dummyShowsData[0]);
+          setSelectedImage(dummyShowsData[0].poster_path);
         }
       } catch (err) {
         console.log('Error fetching product from API:', err);
         setProduct(dummyShowsData[0]);
+        setSelectedImage(dummyShowsData[0].poster_path);
       } finally {
         setLoading(false);
       }
@@ -54,212 +74,317 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
-  const handleAddToCart = async () => {
+  const cleanPrice = (val) => {
+    if (typeof val === 'number') return val;
+    return parseFloat(String(val || 0).replace(/[^0-9.]/g, '')) || 0;
+  };
+
+  const handleAddToCart = async (goToCart = false) => {
     if (!product) return;
     setAddingToCart(true);
 
     try {
       if (isAuthenticated && product._id && product._id.length === 24) {
-        // Authenticated and valid MongoDB ObjectId
-        await api.post('/api/cart/add', { productId: product._id, qty: 1 });
+        await api.post('/api/cart/add', { productId: product._id, qty: quantity });
       }
 
-      // Save to localStorage cart as well for instant UI response
       const savedCart = JSON.parse(localStorage.getItem('kisan_cart') || '[]');
-      const existingIdx = savedCart.findIndex((item) => item._id === product._id);
+      const existingIdx = savedCart.findIndex((item) => String(item._id) === String(product._id));
       if (existingIdx > -1) {
-        savedCart[existingIdx].qty = (savedCart[existingIdx].qty || 1) + 1;
+        savedCart[existingIdx].qty = (savedCart[existingIdx].qty || 1) + quantity;
       } else {
         savedCart.push({
           ...product,
-          qty: 1,
+          qty: quantity,
           price: product.price || '450',
           dummyprice: product.dummyprice || '600',
         });
       }
       localStorage.setItem('kisan_cart', JSON.stringify(savedCart));
+      window.dispatchEvent(new Event('cartUpdated'));
 
-      toast.success(`${product.title || 'Product'} added to cart! 🛒`);
+      toast.success(`${product.title} (${quantity} ${product.unit || 'unit'}) added to cart! 🛒`);
+
+      if (goToCart) {
+        navigate('/Cart');
+      }
     } catch (err) {
       console.error('Add to cart error:', err);
       toast.success('Added to your cart!');
+      if (goToCart) navigate('/Cart');
     } finally {
       setAddingToCart(false);
     }
-  };
-
-  const handleBuyNow = async () => {
-    await handleAddToCart();
-    navigate('/Cart');
   };
 
   if (loading || !product) {
     return <Loading />;
   }
 
-  const posterImg =
-    product.poster_path ||
+  const rawPrice = cleanPrice(product.price);
+  const rawDummy = cleanPrice(product.dummyprice);
+  const totalPrice = (rawPrice * quantity).toLocaleString('en-IN');
+  const mainImage =
+    selectedImage ||
     product.backdrop_path ||
+    product.poster_path ||
     'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80';
 
+  // Agricultural Specifications Mock/Real Data
+  const specs = [
+    { label: 'Germination Rate', value: '98.2% Guaranteed', icon: Leaf },
+    { label: 'Sowing Season', value: 'Kharif & Early Rabi', icon: Calendar },
+    { label: 'Suitable Soil', value: 'Alluvial / Loamy Soil', icon: Layers },
+    { label: 'Purity Level', value: '99.5% Free from Weeds', icon: ShieldCheck },
+  ];
+
   return (
-    <div className="px-6 md:px-16 lg:px-40 pt-28 md:pt-36 pb-24">
-      <div className="flex flex-col md:flex-row gap-10 max-w-6xl mx-auto">
-        {/* Product Image & Thumbnails */}
-        <div className="shrink-0 md:w-1/2">
-          <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40">
-            <img
-              src={posterImg}
-              alt={product.title}
-              className="w-full h-80 sm:h-96 md:h-[420px] object-cover"
-            />
-            {product.category && (
-              <span className="absolute top-4 left-4 px-3 py-1 bg-black/70 backdrop-blur-md text-[#CEC382] text-xs font-semibold rounded-full border border-white/10">
-                {product.category}
-              </span>
-            )}
+    <div className="relative min-h-screen overflow-hidden pb-24 pt-28 sm:pt-36">
+      <BlurCircle top="-5%" left="-5%" color="gold" />
+      <BlurCircle bottom="20%" right="-5%" color="emerald" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 relative z-10">
+        {/* Breadcrumbs */}
+        <nav className="flex items-center gap-2 text-xs text-gray-400 mb-8 overflow-x-auto">
+          <Link to="/" className="hover:text-white transition">Home</Link>
+          <ChevronRight className="w-3.5 h-3.5" />
+          <Link to="/Buy" className="hover:text-white transition">Marketplace</Link>
+          <ChevronRight className="w-3.5 h-3.5" />
+          <span className="text-[#CEC382] font-semibold truncate max-w-xs">{product.title}</span>
+        </nav>
+
+        {/* Product Layout Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          {/* Left Column: Media Gallery */}
+          <div className="lg:col-span-6 flex flex-col gap-4">
+            <div className="relative rounded-3xl overflow-hidden bg-[#101713] border border-white/10 shadow-2xl aspect-[4/3]">
+              <img
+                src={mainImage}
+                alt={product.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute top-4 left-4 flex items-center gap-2">
+                <span className="px-3 py-1 rounded-full bg-black/70 backdrop-blur-md text-[#CEC382] text-xs font-bold border border-white/10">
+                  {product.category || 'Direct Farm'}
+                </span>
+                <span className="px-2.5 py-1 rounded-full bg-emerald-950/80 backdrop-blur-md text-emerald-300 text-xs font-semibold border border-emerald-500/30 flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  Tested Viability
+                </span>
+              </div>
+
+              <button
+                onClick={() => {
+                  setIsLiked(!isLiked);
+                  toast.success(!isLiked ? 'Saved to wishlist ❤️' : 'Removed from wishlist');
+                }}
+                className="absolute top-4 right-4 p-2 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-white hover:bg-black/90 transition cursor-pointer"
+              >
+                <Heart className={`w-4 h-4 ${isLiked ? 'fill-rose-500 text-rose-500' : ''}`} />
+              </button>
+            </div>
+
+            {/* Thumbnail selector */}
+            <div className="flex items-center gap-3">
+              {[mainImage, product.poster_path, product.backdrop_path]
+                .filter(Boolean)
+                .slice(0, 4)
+                .map((imgUrl, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedImage(imgUrl)}
+                    className={`w-20 h-16 rounded-xl overflow-hidden border-2 transition cursor-pointer bg-black/40 ${
+                      selectedImage === imgUrl
+                        ? 'border-[#CEC382] shadow-md shadow-[#CEC382]/20 scale-105'
+                        : 'border-white/10 opacity-70 hover:opacity-100 hover:border-white/30'
+                    }`}
+                  >
+                    <img src={imgUrl} alt="Thumbnail" className="w-full h-full object-cover" />
+                  </button>
+                ))}
+            </div>
           </div>
 
-          <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-gray-400">
-            Quality Inspection Gallery
-          </p>
-          <div className="flex flex-row gap-3 mt-3">
-            {[1, 2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className="border border-white/10 hover:border-[#CEC382] rounded-xl overflow-hidden w-20 h-16 cursor-pointer transition"
-              >
-                <img
-                  src={posterImg}
-                  alt="Gallery thumb"
-                  className="w-full h-full object-cover"
-                />
+          {/* Right Column: Information & Purchasing Options */}
+          <div className="lg:col-span-6 flex flex-col gap-6">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="px-3 py-0.5 rounded-full text-xs font-semibold bg-[#CEC382]/15 text-[#CEC382] border border-[#CEC382]/30">
+                  Verified Producer Listing
+                </span>
+                <span className="text-xs text-emerald-400 font-medium flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5" /> In Stock &amp; Ready for Dispatch
+                </span>
               </div>
-            ))}
+
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                {product.title}
+              </h1>
+
+              {/* Rating & Reviews */}
+              <div className="flex items-center gap-3 mt-3">
+                <div className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-bold text-[#CEC382]">
+                  <Star className="w-4 h-4 fill-[#CEC382] text-[#CEC382]" />
+                  <span>{product.vote_average ? Number(product.vote_average).toFixed(1) : '4.8'}</span>
+                </div>
+                <span className="text-xs text-gray-400">
+                  Based on 140+ verified cultivator orders
+                </span>
+              </div>
+            </div>
+
+            {/* Price Box */}
+            <div className="p-5 rounded-3xl bg-[#111915]/90 border border-white/10 flex items-baseline justify-between">
+              <div>
+                <span className="text-xs text-gray-400 block mb-1">Direct Farmer Price</span>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl sm:text-4xl font-black text-white">
+                    ₹{product.price}
+                  </span>
+                  {product.unit && (
+                    <span className="text-xs text-gray-400">per {product.unit}</span>
+                  )}
+                  {rawDummy > rawPrice && (
+                    <span className="text-xs text-gray-500 line-through ml-2">
+                      MRP: ₹{rawDummy}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="text-right">
+                <span className="text-[11px] text-gray-400 block">Calculated Total</span>
+                <span className="text-xl sm:text-2xl font-black text-[#CEC382]">
+                  ₹{totalPrice}
+                </span>
+              </div>
+            </div>
+
+            {/* Quantity Stepper */}
+            <div className="flex items-center gap-4">
+              <span className="text-xs font-semibold text-gray-300">Order Quantity:</span>
+              <div className="flex items-center bg-[#111915] border border-white/15 rounded-xl p-1">
+                <button
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white transition active:scale-90"
+                  aria-label="Decrease quantity"
+                >
+                  <Minus className="w-3.5 h-3.5" />
+                </button>
+                <span className="w-12 text-center text-sm font-bold text-white">
+                  {quantity}
+                </span>
+                <button
+                  onClick={() => setQuantity((q) => q + 1)}
+                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white transition active:scale-90"
+                  aria-label="Increase quantity"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              <span className="text-xs text-gray-400">
+                ({quantity * 50} kg total packaging)
+              </span>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <button
+                onClick={() => handleAddToCart(false)}
+                disabled={addingToCart}
+                className="flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/15 text-white font-bold text-sm transition active:scale-95 cursor-pointer"
+              >
+                <ShoppingBag className="w-4 h-4 text-[#CEC382]" />
+                <span>{addingToCart ? 'Adding...' : 'Add to Cart'}</span>
+              </button>
+
+              <button
+                onClick={() => handleAddToCart(true)}
+                className="flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-[#CEC382] hover:bg-[#b8a56e] text-black font-bold text-sm shadow-lg shadow-[#CEC382]/25 transition active:scale-95 cursor-pointer"
+              >
+                <span>Buy Now</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Agricultural Specifications Cards */}
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              {specs.map((s, idx) => {
+                const Icon = s.icon;
+                return (
+                  <div
+                    key={idx}
+                    className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/8 flex items-start gap-3"
+                  >
+                    <div className="p-2 rounded-xl bg-[#CEC382]/10 text-[#CEC382]">
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wide block">
+                        {s.label}
+                      </span>
+                      <span className="text-xs font-semibold text-white mt-0.5 block">
+                        {s.value}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Description */}
+            <div className="p-5 rounded-3xl bg-[#111915]/60 border border-white/8">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#CEC382] mb-2">
+                Agronomic Overview &amp; Sowing Notes
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                {product.overview ||
+                  'High quality certified agricultural produce and seeds, carefully harvested and tested for premium germination and yield. Suitable for multiple Indian climatic conditions.'}
+              </p>
+            </div>
+
+            {/* Delivery Assurance */}
+            <div className="flex items-center gap-3 p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/20 text-xs text-emerald-300">
+              <Truck className="w-5 h-5 shrink-0 text-emerald-400" />
+              <span>
+                Dispatched directly from farm location via express agricultural logistics across India within 48 hours.
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Product Details Column */}
-        <div className="relative flex flex-col gap-4 flex-1">
-          <BlurCircle top="-100px" left="-100px" />
-
-          <div className="flex items-center gap-2">
-            <span className="px-3 py-0.5 rounded-full text-xs font-medium bg-[#CEC382]/15 text-[#CEC382] border border-[#CEC382]/30">
-              Verified Farmer Certified
-            </span>
-            <span className="text-xs text-gray-500">· Stock: {product.quantity || 100} {product.unit || 'kg'} available</span>
-          </div>
-
-          <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight">
-            {product.title || product.name || 'Organic Agricultural Product'}
-          </h1>
-
-          <div className="flex items-center gap-2 text-gray-300">
-            <StarIcon className="w-5 h-5 text-[#CEC382] fill-[#CEC382]" />
-            <span className="text-base font-semibold text-white">
-              {product.vote_average ? Number(product.vote_average).toFixed(1) : '4.8'}
-            </span>
-            <span className="text-xs text-gray-400">
-              ({product.vote_count || 12} Verified Reviews)
-            </span>
-          </div>
-
-          <p className="text-gray-300 text-sm leading-relaxed max-w-2xl">
-            {product.overview ||
-              product.description ||
-              'High quality certified agricultural produce and seeds, carefully harvested and tested for premium germination and yield.'}
-          </p>
-
-          {/* Seed varieties if available */}
-          {product.seed && product.seed.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 pt-1">
-              <span className="text-xs text-gray-400">Varieties:</span>
-              {product.seed.map((s, idx) => (
-                <span
-                  key={idx}
-                  className="px-2.5 py-1 text-xs rounded-lg bg-white/5 border border-white/10 text-gray-300"
-                >
-                  {s.name || s}
-                </span>
-              ))}
+        {/* Related Products Section */}
+        <div className="mt-24 pt-12 border-t border-white/10">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                Recommended Alternative Crops &amp; Seeds
+              </h2>
+              <p className="text-xs text-gray-400 mt-1">
+                Cultivators who viewed this item also checked out these top-rated inputs
+              </p>
             </div>
-          )}
-
-          {/* Price Box */}
-          <div className="mt-4 p-4 rounded-2xl bg-white/[0.03] border border-white/10 flex items-baseline gap-3">
-            {product.dummyprice && (
-              <span className="text-gray-500 line-through text-sm">
-                ₹{product.dummyprice}
-              </span>
-            )}
-            <span className="text-3xl font-bold text-white">
-              ₹{product.price}
-            </span>
-            <span className="text-xs text-gray-400">
-              per {product.unit || 'kg'} (incl. all taxes)
-            </span>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex items-center flex-wrap gap-4 mt-2">
-            <button
-              onClick={handleAddToCart}
-              disabled={addingToCart}
-              className="px-6 py-3 text-sm bg-white/10 hover:bg-white/20 border border-white/20 hover:border-[#CEC382] text-white transition rounded-full font-semibold cursor-pointer flex items-center gap-2"
-            >
-              <ShoppingBag className="w-4 h-4 text-[#CEC382]" />
-              {addingToCart ? 'Adding...' : 'Add to Cart'}
-            </button>
-
-            <button
-              onClick={handleBuyNow}
-              className="px-7 py-3 text-sm bg-[#CEC382] hover:bg-[#b8a56e] text-black transition rounded-full font-semibold cursor-pointer flex items-center gap-2 shadow-lg shadow-[#CEC382]/20"
-            >
-              Buy Now <ArrowRight className="w-4 h-4" />
-            </button>
 
             <button
               onClick={() => {
-                setIsLiked(!isLiked);
-                toast.success(!isLiked ? 'Saved to wishlist!' : 'Removed from wishlist');
+                navigate('/Product');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className={`p-3 rounded-full border transition cursor-pointer active:scale-95 ${
-                isLiked
-                  ? 'bg-rose-500/20 border-rose-500 text-rose-400'
-                  : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'
-              }`}
+              className="text-xs font-bold text-[#CEC382] hover:text-white transition flex items-center gap-1"
             >
-              <Heart className={`w-5 h-5 ${isLiked ? 'fill-rose-500' : ''}`} />
+              <span>View All</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Quality Guarantee badge */}
-          <div className="flex items-center gap-3 pt-4 border-t border-white/10 text-xs text-gray-400">
-            <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0" />
-            <span>100% Quality & Germination Guarantee · Fast Express Dispatch Across India</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {dummyShowsData
+              .filter((p) => String(p._id) !== String(id))
+              .slice(0, 4)
+              .map((item) => (
+                <FarmerCard key={item._id} product={item} />
+              ))}
           </div>
-        </div>
-      </div>
-
-      {/* Related Products Section */}
-      <div className="mt-24">
-        <h2 className="text-2xl font-bold text-white mb-8">Related Produce & Seeds</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {dummyShowsData.slice(0, 4).map((item, index) => (
-            <FarmerCard key={index} product={item} />
-          ))}
-        </div>
-
-        <div className="flex justify-center mt-12">
-          <button
-            onClick={() => {
-              navigate('/product');
-              window.scrollTo(0, 0);
-            }}
-            className="px-8 py-3 text-sm bg-[#CEC382] hover:bg-[#b8a56e] text-black transition rounded-full font-semibold cursor-pointer shadow-md shadow-[#CEC382]/20"
-          >
-            Show More Products
-          </button>
         </div>
       </div>
     </div>

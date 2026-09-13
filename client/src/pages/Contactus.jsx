@@ -27,34 +27,34 @@ const Contactus = () => {
 
   return (
     <div className="relative overflow-hidden min-h-screen">
-      <BlurCircle top="-5%" right="-10%" />
-      <BlurCircle bottom="5%" left="-10%" />
+      <BlurCircle top="-5%" right="-10%" color="gold" />
+      <BlurCircle bottom="5%" left="-10%" color="emerald" />
 
       {/* Header */}
-      <section className="px-6 md:px-16 lg:px-36 pt-36 pb-16 text-center">
-        <span className="inline-block px-4 py-1 text-xs font-semibold tracking-widest uppercase bg-[#CEC382]/15 text-[#CEC382] rounded-full mb-5">
+      <section className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-32 sm:pt-36 pb-14 text-center">
+        <span className="inline-block px-4 py-1 text-xs font-semibold tracking-widest uppercase bg-[#CEC382]/15 text-[#CEC382] rounded-full mb-5 border border-[#CEC382]/30">
           Get In Touch
         </span>
-        <h1 className="text-5xl md:text-6xl font-bold leading-tight">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white">
           We'd Love to <span className="text-[#CEC382]">Hear</span> From You
         </h1>
-        <p className="mt-5 text-gray-400 max-w-xl mx-auto">
-          Whether you have a question, a suggestion, or just want to say hello — our team is here for you.
+        <p className="mt-4 text-gray-300 max-w-xl mx-auto text-sm sm:text-base">
+          Whether you have a question about certified seed batches, transport logistics, or listing produce — our agricultural advisory team is here for you.
         </p>
       </section>
 
-      <section className="px-6 md:px-16 lg:px-36 pb-28 grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <section className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pb-28 grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Contact Info */}
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-4">
           {contactInfo.map((c) => (
             <div
               key={c.label}
-              className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-[#CEC382]/40 transition"
+              className="flex items-start gap-4 bg-[#111915]/80 border border-white/10 rounded-2xl p-6 hover:border-[#CEC382]/40 transition"
             >
               <div className="bg-[#CEC382]/10 rounded-xl p-3 shrink-0">{c.icon}</div>
               <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wide">{c.label}</p>
-                <p className="text-white font-medium mt-1">{c.value}</p>
+                <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">{c.label}</p>
+                <p className="text-white font-semibold mt-1 text-sm sm:text-base">{c.value}</p>
               </div>
             </div>
           ))}

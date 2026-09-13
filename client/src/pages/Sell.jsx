@@ -86,18 +86,18 @@ const Sell = () => {
 
   return (
     <div className="relative overflow-hidden min-h-screen">
-      <BlurCircle top="-5%" left="-10%" />
-      <BlurCircle bottom="5%" right="-10%" />
+      <BlurCircle top="-5%" left="-10%" color="emerald" />
+      <BlurCircle bottom="5%" right="-10%" color="gold" />
 
       {/* Header */}
-      <section className="px-6 md:px-16 lg:px-36 pt-36 pb-10">
-        <span className="inline-block px-4 py-1 text-xs font-semibold tracking-widest uppercase bg-[#CEC382]/15 text-[#CEC382] rounded-full mb-5">
+      <section className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-32 sm:pt-36 pb-10">
+        <span className="inline-block px-4 py-1 text-xs font-semibold tracking-widest uppercase bg-[#CEC382]/15 text-[#CEC382] rounded-full mb-5 border border-[#CEC382]/30">
           Sell on Kisan
         </span>
-        <h1 className="text-4xl md:text-5xl font-bold leading-tight max-w-xl">
-          List Your <span className="text-[#CEC382]">Seeds & Produce</span>
+        <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight max-w-xl text-white">
+          List Your <span className="text-[#CEC382]">Seeds &amp; Produce</span>
         </h1>
-        <p className="mt-4 text-gray-400 max-w-lg">
+        <p className="mt-3 text-gray-300 max-w-lg text-sm sm:text-base">
           Reach thousands of farmers directly. No middlemen. Keep 100% of what you earn with direct farmer payments.
         </p>
 
@@ -121,25 +121,25 @@ const Sell = () => {
       </section>
 
       {/* Why Sell cards */}
-      <section className="px-6 md:px-16 lg:px-36 pb-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <section className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pb-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
           { icon: <Leaf className="w-5 h-5 text-[#CEC382]" />, title: 'Zero Commission', desc: 'Keep 100% of what you earn.' },
           { icon: <IndianRupee className="w-5 h-5 text-[#CEC382]" />, title: 'Direct Payment', desc: 'Get paid straight to your UPI or account.' },
           { icon: <Tag className="w-5 h-5 text-[#CEC382]" />, title: 'Set Your Price', desc: 'Fair decentralized agricultural trade.' },
         ].map((b) => (
-          <div key={b.title} className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-2xl p-5 hover:border-[#CEC382]/40 transition">
+          <div key={b.title} className="flex items-start gap-4 bg-[#111915]/80 border border-white/10 rounded-2xl p-5 hover:border-[#CEC382]/40 transition">
             <div className="bg-[#CEC382]/10 rounded-xl p-2.5 shrink-0">{b.icon}</div>
             <div>
               <p className="font-semibold text-white text-sm">{b.title}</p>
-              <p className="text-gray-500 text-xs mt-1">{b.desc}</p>
+              <p className="text-gray-400 text-xs mt-1">{b.desc}</p>
             </div>
           </div>
         ))}
       </section>
 
       {/* Form */}
-      <section className="px-6 md:px-16 lg:px-36 pb-28">
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-8 max-w-3xl shadow-xl">
+      <section className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pb-28">
+        <div className="bg-[#111915]/90 border border-white/10 rounded-3xl p-6 sm:p-10 max-w-3xl shadow-2xl">
           {submitted ? (
             <div className="flex flex-col items-center justify-center gap-4 py-16 text-center">
               <div className="w-20 h-20 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">

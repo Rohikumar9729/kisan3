@@ -35,10 +35,11 @@ const sections = [
 const Privacy = () => {
   return (
     <div className="relative overflow-hidden min-h-screen">
-      <BlurCircle top="-5%" right="-10%" />
+      <BlurCircle top="-5%" right="-10%" color="gold" />
+      <BlurCircle bottom="10%" left="-10%" color="emerald" />
 
-      <div className="px-6 md:px-16 lg:px-36 pt-36 pb-28 max-w-4xl">
-        <span className="inline-block px-4 py-1 text-xs font-semibold tracking-widest uppercase bg-[#CEC382]/15 text-[#CEC382] rounded-full mb-5">
+      <div className="max-w-4xl mx-auto px-4 sm:px-8 lg:px-16 pt-32 sm:pt-36 pb-28">
+        <span className="inline-block px-4 py-1 text-xs font-semibold tracking-widest uppercase bg-[#CEC382]/15 text-[#CEC382] rounded-full mb-5 border border-[#CEC382]/30">
           Legal
         </span>
         <h1 className="text-4xl md:text-5xl font-bold mb-3">Privacy Policy</h1>

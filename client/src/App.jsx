@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Product from './pages/Product'
@@ -8,6 +8,7 @@ import Buy from './pages/Buy'
 import Cart from './pages/Cart'
 import Sell from './pages/Sell'
 import Myorder from './pages/Myorder'
+import ReceivedRequests from './pages/ReceivedRequests'
 import Aboutus from './pages/Aboutus'
 import Contactus from './pages/Contactus'
 import Privacy from './pages/Privacy'
@@ -15,16 +16,8 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import { Toaster } from 'react-hot-toast'
 import Footer from './components/Footer'
-import Layout from './pages/admin/Layout'
-import Mycart from './pages/admin/Mycart'
-import Addproduct from './pages/admin/Addproduct'
-import Orders from './pages/admin/Orders'
-import SellRequests from './pages/admin/SellRequests'
 
 const App = () => {
-  const location = useLocation()
-  const isAdminRoute = location.pathname.startsWith('/admin')
-
   return (
     <>
       <Toaster
@@ -39,7 +32,7 @@ const App = () => {
           },
         }}
       />
-      {!isAdminRoute && <Navbar />}
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/Product" element={<Product />} />
@@ -48,20 +41,16 @@ const App = () => {
         <Route path="/Cart" element={<Cart />} />
         <Route path="/Sell" element={<Sell />} />
         <Route path="/Myorder" element={<Myorder />} />
+        <Route path="/ReceivedRequests" element={<ReceivedRequests />} />
+        <Route path="/received-requests" element={<ReceivedRequests />} />
         <Route path="/Aboutus" element={<Aboutus />} />
         <Route path="/Contactus" element={<Contactus />} />
         <Route path="/Privacy" element={<Privacy />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/register" element={<Signup />} />
-        <Route path="/admin/*" element={<Layout />}>
-          <Route index element={<Mycart />} />
-          <Route path="add-product" element={<Addproduct />} />
-          <Route path="orders" element={<Orders />} />
-          <Route path="sell-requests" element={<SellRequests />} />
-        </Route>
       </Routes>
-      {!isAdminRoute && <Footer />}
+      <Footer />
     </>
   )
 }

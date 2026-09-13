@@ -54,8 +54,8 @@ const Login = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center px-4 py-28 overflow-hidden">
       {/* Ambient background glows */}
-      <BlurCircle top="-10%" left="-5%" />
-      <BlurCircle bottom="-10%" right="-5%" />
+      <BlurCircle top="-10%" left="-5%" color="gold" />
+      <BlurCircle bottom="-10%" right="-5%" color="emerald" />
 
       <div className="w-full max-w-md relative z-10">
         {/* Brand Header */}

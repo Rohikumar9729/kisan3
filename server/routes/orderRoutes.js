@@ -2,6 +2,7 @@ import express from 'express';
 import { protect } from '../middleware/authMiddleware.js';
 import {
     getMyOrders,
+    getReceivedOrders,
     getAllOrders,
     placeOrder,
     markAsPaid,
@@ -14,6 +15,7 @@ const router = express.Router();
 router.use(protect);
 
 router.get('/my',           getMyOrders);
+router.get('/received',     getReceivedOrders);
 router.get('/',             getAllOrders);
 router.post('/',            placeOrder);
 router.patch('/:id/pay',    markAsPaid);

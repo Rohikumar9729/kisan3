@@ -1,7 +1,5 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
-import Order from '../models/Order.js';
-import Product from '../models/Product.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'kisan_jwt_secret_key_2025';
 
@@ -48,7 +46,7 @@ export const registerUser = async (req, res) => {
             name,
             email: email.toLowerCase(),
             password,
-            role: role === 'farmer' ? 'farmer' : (role === 'admin' ? 'admin' : 'user'),
+            role: role === 'farmer' ? 'farmer' : 'user',
             phone: phone || '',
             address: address || '',
             image: defaultImage,
@@ -193,31 +191,3 @@ export const updateProfile = async (req, res) => {
     }
 };
 
-// ─── GET /api/users/admin/dashboard (admin) ────────────────────────────────────
-export const getDashboard = async (req, res) => {
-    try {
-        const [totalProduct, totalUser, totalOrders, recentOrders] = await Promise.all([
-            Product.countDocuments({ isActive: true }),
-            User.countDocuments(),
-            Order.countDocuments(),
-            Order.find().populate('product').sort({ createdAt: -1 }).limit(10),
-        ]);
-        res.json({
-            success: true,
-            stats: { totalProduct, totalUser, totalOrders },
-            recentOrders,
-        });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
-    }
-};
-
-// ─── GET /api/users (admin) ────────────────────────────────────────────────────
-export const getAllUsers = async (req, res) => {
-    try {
-        const users = await User.find().select('-password').sort({ createdAt: -1 });
-        res.json({ success: true, users });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
-    }
-};

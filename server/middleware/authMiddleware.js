@@ -2,10 +2,8 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'kisan_jwt_secret_key_2025';
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || 'admin@kisan.com').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
-const ADMIN_IDS = (process.env.ADMIN_IDS || '').split(',').map(id => id.trim()).filter(Boolean);
 
-// ── Protect Routes (JWT) ──────────────────────────────────────────────────────
+// Protect Routes (JWT)
 export const protect = async (req, res, next) => {
     try {
         let token;
@@ -49,25 +47,4 @@ export const protect = async (req, res, next) => {
             message: 'Invalid or expired authentication token. Please log in again.',
         });
     }
-};
-
-// ── Admin Guard ───────────────────────────────────────────────────────────────
-export const adminOnly = (req, res, next) => {
-    if (!req.user) {
-        return res.status(401).json({ success: false, message: 'Authentication required' });
-    }
-
-    const isAdmin =
-        req.user.role === 'admin' ||
-        ADMIN_EMAILS.includes(req.user.email?.toLowerCase()) ||
-        ADMIN_IDS.includes(req.user._id.toString());
-
-    if (!isAdmin) {
-        return res.status(403).json({
-            success: false,
-            message: 'Access forbidden: Admin privileges required.',
-        });
-    }
-
-    next();
 };

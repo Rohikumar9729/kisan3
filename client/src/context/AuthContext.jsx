@@ -113,7 +113,6 @@ export const AuthProvider = ({ children }) => {
     token,
     isLoading,
     isAuthenticated: Boolean(user && token),
-    isAdmin: user?.role === 'admin' || user?.email?.toLowerCase() === 'admin@kisan.com',
     login,
     register,
     logout,

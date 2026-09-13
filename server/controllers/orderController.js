@@ -1,7 +1,7 @@
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 
-// ─── GET /api/orders/my  (auth) ───────────────────────────────────────────────
+// GET /api/orders/my  (orders placed by me as a buyer)
 export const getMyOrders = async (req, res) => {
     try {
         const orders = await Order.find({ user: req.auth.userId })
@@ -13,7 +13,32 @@ export const getMyOrders = async (req, res) => {
     }
 };
 
-// ─── GET /api/orders  (admin) ─────────────────────────────────────────────────
+// GET /api/orders/received  (incoming buy requests for products I published)
+export const getReceivedOrders = async (req, res) => {
+    try {
+        const sellerId = req.auth.userId;
+
+        // Find all products published by this seller
+        const myProducts = await Product.find({ seller: sellerId }).select('_id');
+        const productIds = myProducts.map(p => p._id);
+
+        const orders = await Order.find({
+            $or: [
+                { seller: sellerId },
+                { product: { $in: productIds } }
+            ]
+        })
+        .populate('product')
+        .populate('user', 'name email phone address image')
+        .sort({ createdAt: -1 });
+
+        res.json({ success: true, orders });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+};
+
+// GET /api/orders
 export const getAllOrders = async (req, res) => {
     try {
         const orders = await Order.find()
@@ -26,7 +51,7 @@ export const getAllOrders = async (req, res) => {
     }
 };
 
-// ─── POST /api/orders  (auth) ─────────────────────────────────────────────────
+// POST /api/orders  (buyer places order)
 export const placeOrder = async (req, res) => {
     try {
         const { productId, Quantity, DeliveryAddress, paymentMethod } = req.body;
@@ -47,6 +72,7 @@ export const placeOrder = async (req, res) => {
 
         const order = await Order.create({
             user: req.auth.userId,
+            seller: product.seller || null,
             product: product._id,
             Quantity: Number(Quantity),
             amount,
@@ -62,13 +88,13 @@ export const placeOrder = async (req, res) => {
     }
 };
 
-// ─── PATCH /api/orders/:id/pay  (auth: order owner) ──────────────────────────
+// PATCH /api/orders/:id/pay  (order owner pays)
 export const markAsPaid = async (req, res) => {
     try {
         const order = await Order.findById(req.params.id);
         if (!order)
             return res.status(404).json({ success: false, message: 'Order not found' });
-        if (order.user !== req.auth.userId)
+        if (order.user.toString() !== req.auth.userId)
             return res.status(403).json({ success: false, message: 'Not authorized' });
 
         order.isPaid = true;
@@ -80,17 +106,25 @@ export const markAsPaid = async (req, res) => {
     }
 };
 
-// ─── PATCH /api/orders/:id/status  (admin) ────────────────────────────────────
+// PATCH /api/orders/:id/status  (seller accepts/updates order status)
 export const updateOrderStatus = async (req, res) => {
     try {
         const { status } = req.body;
-        const order = await Order.findByIdAndUpdate(
-            req.params.id,
-            { status },
-            { new: true }
-        ).populate('product');
+        const order = await Order.findById(req.params.id).populate('product');
         if (!order)
             return res.status(404).json({ success: false, message: 'Order not found' });
+
+        const isSeller =
+            (order.seller && order.seller.toString() === req.auth.userId) ||
+            (order.product && order.product.seller && order.product.seller.toString() === req.auth.userId);
+        const isBuyer = order.user && order.user.toString() === req.auth.userId;
+
+        if (!isSeller && !isBuyer) {
+            return res.status(403).json({ success: false, message: 'Not authorized to update this order' });
+        }
+
+        order.status = status;
+        await order.save();
         res.json({ success: true, order });
     } catch (err) {
         res.status(500).json({ success: false, message: err.message });

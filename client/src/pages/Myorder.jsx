@@ -108,9 +108,9 @@ const Myorder = () => {
   };
 
   return !isLoading ? (
-    <div className="px-6 md:px-16 lg:px-40 pt-28 md:pt-36 min-h-[85vh] pb-24 relative overflow-hidden">
-      <BlurCircle top="100px" left="100px" />
-      <BlurCircle bottom="0px" right="400px" />
+    <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-32 sm:pt-36 min-h-[85vh] pb-24 relative overflow-hidden">
+      <BlurCircle top="-5%" left="-5%" color="gold" />
+      <BlurCircle bottom="10%" right="-5%" color="emerald" />
 
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">

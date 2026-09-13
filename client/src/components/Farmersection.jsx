@@ -1,72 +1,68 @@
-import { ArrowRight, Leaf } from 'lucide-react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  ArrowRight,
+  TrendingUp
+} from 'lucide-react';
 
 const FarmerSection = () => {
   const navigate = useNavigate();
 
   return (
-    <div
-      style={{ backgroundImage: "url('/background2.jpg')" }}
-      className="
-        flex flex-col items-start justify-center gap-6
-        px-6 md:px-16 lg:px-36
-        bg-cover bg-center bg-no-repeat
-        h-screen relative overflow-hidden
-      "
-    >
-      {/* Overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+    <section className="relative min-h-[92vh] flex items-center pt-28 pb-16 px-4 sm:px-8 lg:px-16 overflow-hidden">
+      {/* Background with Increased Visibility */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat -z-20 scale-105 transition-transform duration-1000"
+        style={{ backgroundImage: "url('/background2.jpg')" }}
+      />
+      {/* Subtle gradient overlays so the background image remains clearly visible while text is crisp */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#090d0b]/80 via-[#090d0b]/40 to-transparent -z-10" />
+      <div className="absolute inset-0 bg-black/20 -z-10" />
 
-      <div className="relative z-10 flex flex-col gap-5">
-        {/* Badge */}
-        <span className="flex items-center gap-2 px-4 py-1.5 text-xs font-semibold tracking-widest uppercase bg-[#CEC382]/15 border border-[#CEC382]/30 text-[#CEC382] rounded-full w-fit backdrop-blur-sm">
-          <Leaf className="w-3.5 h-3.5" />
-          India's Farmer Marketplace
-        </span>
+      <div className="max-w-7xl mx-auto w-full relative z-10">
+        {/* Hero Text & Actions */}
+        <div className="max-w-3xl flex flex-col items-start gap-6">
 
-        <h1 className="text-5xl md:text-[70px] md:leading-[1.1] font-bold max-w-[560px]">
-          Quality Seeds,<br />
-          <span className="text-[#CEC382]">Directly</span> Online
-        </h1>
+          {/* Headline */}
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.12] drop-shadow-md">
+            Pure Seeds &amp; Crops,<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#CEC382] via-[#e5da99] to-[#b8a56e]">
+              Direct From Farmers
+            </span>
+          </h1>
 
-        <p className="text-gray-300 max-w-md text-base leading-relaxed">
-          A platform where farmers interact, exchange unused seeds &amp; products,
-          and buy quality inputs — at fair prices, without middlemen.
-        </p>
+          {/* Subtext */}
+          <p className="text-gray-200 text-sm sm:text-base leading-relaxed max-w-xl drop-shadow">
+            Connect directly with verified farmers across 18 states. Buy lab-tested seeds, organic fertilizers, and fresh farm harvests at fair, transparent prices.
+          </p>
 
-        <div className="flex flex-wrap items-center gap-4 mt-2">
-          <button
-            onClick={() => navigate('/Buy')}
-            className="flex items-center gap-2 px-7 py-3 text-sm font-semibold rounded-full cursor-pointer transition hover:scale-105 active:scale-95"
-            style={{ backgroundColor: '#CEC382', color: '#1a1a1a' }}
-          >
-            Shop Now
-            <ArrowRight className="w-5 h-5" />
-          </button>
-          <button
-            onClick={() => navigate('/Sell')}
-            className="flex items-center gap-2 px-7 py-3 text-sm font-semibold rounded-full cursor-pointer border border-white/30 text-white hover:bg-white/10 transition backdrop-blur-sm"
-          >
-            Start Selling
-          </button>
-        </div>
+          {/* CTAs */}
+          <div className="flex flex-wrap items-center gap-3.5 pt-2 w-full sm:w-auto">
+            <button
+              onClick={() => {
+                navigate('/Buy');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm bg-[#CEC382] hover:bg-[#b8a56e] text-[#090d0b] shadow-lg shadow-[#CEC382]/25 active:scale-95 transition cursor-pointer"
+            >
+              <span>Explore Marketplace</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
 
-        {/* Mini Stats */}
-        <div className="flex gap-8 mt-4">
-          {[
-            { label: 'Farmers', value: '12K+' },
-            { label: 'Seed Varieties', value: '500+' },
-            { label: 'States', value: '18' },
-          ].map((s) => (
-            <div key={s.label}>
-              <p className="text-xl font-bold text-[#CEC382]">{s.value}</p>
-              <p className="text-xs text-gray-400">{s.label}</p>
-            </div>
-          ))}
+            <button
+              onClick={() => {
+                navigate('/Sell');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-6 py-3.5 rounded-full font-semibold text-sm text-white bg-black/40 hover:bg-black/60 border border-white/20 hover:border-[#CEC382]/40 backdrop-blur-md active:scale-95 transition cursor-pointer"
+            >
+              <TrendingUp className="w-4 h-4 text-[#CEC382]" />
+              <span>Sell Your Produce</span>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
