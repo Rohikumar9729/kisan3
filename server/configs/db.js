@@ -1,9 +1,22 @@
 import mongoose from 'mongoose';
+import dns from 'dns';
+
+// Use public DNS for SRV queries if needed
+try {
+    dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch (e) {
+    // Ignore if not supported in environment
+}
+
+let isListenerAttached = false;
 
 const connectDB = async () => {
     try {
-        mongoose.connection.on('connected', () => console.log('🍃 MongoDB connected successfully!'));
-        mongoose.connection.on('error', (err) => console.error('❌ MongoDB connection error:', err.message));
+        if (!isListenerAttached) {
+            mongoose.connection.on('connected', () => console.log('🍃 MongoDB connected successfully!'));
+            mongoose.connection.on('error', (err) => console.error('❌ MongoDB error:', err.message));
+            isListenerAttached = true;
+        }
 
         const uri = process.env.MONGODB_URI;
         if (!uri) {
@@ -11,17 +24,9 @@ const connectDB = async () => {
             return;
         }
 
-        // Clean URI to base cluster URL and specify dbName in connection options
-        // This avoids SSL Alert 80 and invalid certificate handshake errors on MongoDB Atlas
-        const cleanUri = uri.split('?')[0].replace(/\/+$/, '');
-        const baseUri = cleanUri.includes('.mongodb.net/')
-            ? cleanUri.substring(0, cleanUri.lastIndexOf('.mongodb.net') + 12)
-            : cleanUri;
-
-        await mongoose.connect(baseUri, {
+        await mongoose.connect(uri, {
             dbName: 'KISAN3',
-            retryWrites: true,
-            w: 'majority',
+            serverSelectionTimeoutMS: 8000,
         });
     } catch (error) {
         console.error('❌ MongoDB connection failed:', error.message);
