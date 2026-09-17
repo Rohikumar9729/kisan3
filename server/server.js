@@ -4,9 +4,9 @@ import 'dotenv/config';
 import connectDB from './configs/db.js';
 
 import productRoutes from './routes/productRoutes.js';
-import orderRoutes   from './routes/orderRoutes.js';
-import cartRoutes    from './routes/cartRoutes.js';
-import userRoutes    from './routes/userRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
@@ -16,7 +16,7 @@ const port = process.env.PORT || 4000;
 // Middleware
 app.use(express.json());
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: process.env.CLIENT_URL || 'http://localhost:5173' || 'http://localhost:5174',
     credentials: true,
 }));
 
@@ -25,9 +25,9 @@ app.get('/', (_req, res) => res.json({ message: 'Kisan API is live!', status: 'o
 
 // API Routes
 app.use('/api/products', productRoutes);
-app.use('/api/orders',   orderRoutes);
-app.use('/api/cart',     cartRoutes);
-app.use('/api/users',    userRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/users', userRoutes);
 
 // Error handling
 app.use(notFound);
