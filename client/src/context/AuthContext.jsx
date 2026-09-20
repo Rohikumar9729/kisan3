@@ -71,7 +71,14 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, message: data.message || 'Login failed' };
     } catch (err) {
-      const msg = err.response?.data?.message || (err.code === 'ERR_NETWORK' ? 'Server is offline. Please make sure backend is running on port 4000.' : err.message) || 'Login failed. Please check your credentials.';
+      const msg =
+        err.response?.data?.message ||
+        (err.code === 'ERR_NETWORK'
+          ? (import.meta.env.DEV
+              ? 'Server is offline. Please ensure backend is running on port 4000.'
+              : 'Unable to connect to backend server. Please check backend deployment & network connection.')
+          : err.message) ||
+        'Login failed. Please check your credentials.';
       toast.error(msg);
       return { success: false, message: msg };
     }
@@ -87,7 +94,14 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, message: data.message || 'Registration failed' };
     } catch (err) {
-      const msg = err.response?.data?.message || (err.code === 'ERR_NETWORK' ? 'Server is offline. Please make sure backend is running on port 4000.' : err.message) || 'Registration failed. Please try again.';
+      const msg =
+        err.response?.data?.message ||
+        (err.code === 'ERR_NETWORK'
+          ? (import.meta.env.DEV
+              ? 'Server is offline. Please ensure backend is running on port 4000.'
+              : 'Unable to connect to backend server. Please check backend deployment & network connection.')
+          : err.message) ||
+        'Registration failed. Please try again.';
       toast.error(msg);
       return { success: false, message: msg };
     }

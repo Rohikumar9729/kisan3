@@ -2,6 +2,7 @@
   "name": "kisan3",
   "version": "1.0.0",
   "description": "Kisan - India's Farmer Marketplace",
+  "type": "module",
   "private": true,
   "workspaces": [
     "client",
@@ -11,10 +12,11 @@
     "dev": "concurrently --names \"CLIENT,SERVER\" --prefix-colors \"cyan,yellow\" \"npm run dev --prefix client\" \"npm run server --prefix server\"",
     "client": "npm run dev --prefix client",
     "server": "npm run server --prefix server",
-    "install:all": "npm install --legacy-peer-deps && npm install --prefix client --legacy-peer-deps && npm install --prefix server --legacy-peer-deps",
-    "build": "npm install --prefix client --legacy-peer-deps && npm run build --prefix client"
+    "install:all": "npm install --legacy-peer-deps",
+    "build": "npm run build --prefix client"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
   }
 }
+
