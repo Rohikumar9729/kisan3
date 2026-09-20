@@ -15,6 +15,14 @@
     "install:all": "npm install --legacy-peer-deps",
     "build": "npm run build --prefix client"
   },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.5"
+  },
   "devDependencies": {
     "concurrently": "^9.1.2"
   }
