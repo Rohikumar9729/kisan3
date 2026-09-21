@@ -67,7 +67,7 @@ export const placeOrder = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Product not found' });
 
         // Parse price — strips ₹, /kg etc.
-        const numericPrice = parseFloat(product.price.replace(/[^0-9.]/g, ''));
+        const numericPrice = parseFloat((product.price || '0').toString().replace(/[^0-9.]/g, '')) || 0;
         const amount = numericPrice * Number(Quantity);
 
         const order = await Order.create({

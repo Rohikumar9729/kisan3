@@ -4,6 +4,9 @@ import Cart from '../models/Cart.js';
 export const getCart = async (req, res) => {
     try {
         const cart = await Cart.findOne({ user: req.auth.userId }).populate('items.product');
+        if (cart && cart.items) {
+            cart.items = cart.items.filter(i => i.product != null);
+        }
         res.json({ success: true, cart: cart || { items: [] } });
     } catch (err) {
         res.status(500).json({ success: false, message: err.message });
@@ -23,7 +26,7 @@ export const addToCart = async (req, res) => {
             cart = new Cart({ user: req.auth.userId, items: [] });
         }
 
-        const existing = cart.items.find(i => i.product.toString() === productId);
+        const existing = cart.items.find(i => (i.product?._id || i.product).toString() === productId.toString());
         if (existing) {
             existing.qty += Number(qty);
         } else {
@@ -32,6 +35,9 @@ export const addToCart = async (req, res) => {
 
         await cart.save();
         await cart.populate('items.product');
+        if (cart.items) {
+            cart.items = cart.items.filter(i => i.product != null);
+        }
         res.json({ success: true, cart });
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });
@@ -49,18 +55,21 @@ export const updateCartItem = async (req, res) => {
         if (!cart)
             return res.status(404).json({ success: false, message: 'Cart not found' });
 
-        const item = cart.items.find(i => i.product.toString() === productId);
+        const item = cart.items.find(i => (i.product?._id || i.product).toString() === productId.toString());
         if (!item)
             return res.status(404).json({ success: false, message: 'Item not in cart' });
 
         if (Number(qty) <= 0) {
-            cart.items = cart.items.filter(i => i.product.toString() !== productId);
+            cart.items = cart.items.filter(i => (i.product?._id || i.product).toString() !== productId.toString());
         } else {
             item.qty = Number(qty);
         }
 
         await cart.save();
         await cart.populate('items.product');
+        if (cart.items) {
+            cart.items = cart.items.filter(i => i.product != null);
+        }
         res.json({ success: true, cart });
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });
@@ -74,9 +83,12 @@ export const removeFromCart = async (req, res) => {
         if (!cart)
             return res.status(404).json({ success: false, message: 'Cart not found' });
 
-        cart.items = cart.items.filter(i => i.product.toString() !== req.params.productId);
+        cart.items = cart.items.filter(i => (i.product?._id || i.product).toString() !== req.params.productId.toString());
         await cart.save();
         await cart.populate('items.product');
+        if (cart.items) {
+            cart.items = cart.items.filter(i => i.product != null);
+        }
         res.json({ success: true, cart });
     } catch (err) {
         res.status(500).json({ success: false, message: err.message });

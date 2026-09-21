@@ -84,8 +84,12 @@ const ProductDetails = () => {
     setAddingToCart(true);
 
     try {
-      if (isAuthenticated && product._id && product._id.length === 24) {
-        await api.post('/api/cart/add', { productId: product._id, qty: quantity });
+      if (isAuthenticated && product._id) {
+        try {
+          await api.post('/api/cart/add', { productId: product._id, qty: quantity });
+        } catch (apiErr) {
+          console.warn('Cart sync note:', apiErr.response?.data?.message || apiErr.message);
+        }
       }
 
       const savedCart = JSON.parse(localStorage.getItem('kisan_cart') || '[]');

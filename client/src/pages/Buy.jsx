@@ -43,9 +43,7 @@ const Buy = () => {
             category: p.category || 'Seeds',
           }));
 
-          const dbIds = new Set(dbProducts.map((p) => String(p._id)));
-          const filteredDummy = dummyShowsData.filter((d) => !dbIds.has(String(d._id)));
-          setProducts([...dbProducts, ...filteredDummy]);
+          setProducts(dbProducts);
         }
       } catch (err) {
         console.log('Using local catalog fallback:', err);

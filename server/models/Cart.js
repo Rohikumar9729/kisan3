@@ -6,7 +6,7 @@ const cartItemSchema = new mongoose.Schema({
 });
 
 const cartSchema = new mongoose.Schema({
-    user: { type: String, ref: 'User', required: true, unique: true },  // Clerk user ID
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
     items: [cartItemSchema],
 }, { timestamps: true });
 

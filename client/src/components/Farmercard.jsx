@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Star, ShoppingBag, Heart, Sparkles, ArrowRight } from 'lucide-react';
+import api from '../lib/api';
 
 const FarmerCard = ({ product }) => {
   const navigate = useNavigate();
@@ -21,9 +22,19 @@ const FarmerCard = ({ product }) => {
       ? Math.round(((rawDummy - rawPrice) / rawDummy) * 100)
       : null;
 
-  const handleAddToCart = (e, navigateToCart = false) => {
+  const handleAddToCart = async (e, navigateToCart = false) => {
     if (e && e.stopPropagation) e.stopPropagation();
     try {
+      const token = localStorage.getItem('kisan_token');
+      // If user is authenticated, save directly to MongoDB Cart
+      if (token && product._id) {
+        try {
+          await api.post('/api/cart/add', { productId: product._id, qty: 1 });
+        } catch (apiErr) {
+          console.warn('Backend cart sync note:', apiErr.response?.data?.message || apiErr.message);
+        }
+      }
+
       const savedCart = JSON.parse(localStorage.getItem('kisan_cart') || '[]');
       const existingIdx = savedCart.findIndex((item) => String(item._id) === String(product._id));
       
@@ -46,7 +57,7 @@ const FarmerCard = ({ product }) => {
       }
     } catch (err) {
       console.error(err);
-      navigate('/Cart');
+      if (navigateToCart) navigate('/Cart');
     }
   };
 

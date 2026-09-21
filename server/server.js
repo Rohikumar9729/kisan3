@@ -8,6 +8,8 @@ import orderRoutes from './routes/orderRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 
+import seedInitialProducts from './configs/seed.js';
+
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 const app = express();
@@ -77,6 +79,7 @@ app.use(errorHandler);
 // In Vercel serverless functions, Vercel manages the HTTP server via the exported app
 if (!process.env.VERCEL) {
     connectDB().then(() => {
+        seedInitialProducts().catch(() => {});
         app.listen(port, () => {
             console.log(`Server running on http://localhost:${port}`);
         });

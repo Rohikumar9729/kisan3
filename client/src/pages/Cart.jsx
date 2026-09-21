@@ -34,7 +34,7 @@ const Cart = () => {
     } catch (e) {
       console.error(e);
     }
-    return dummyShowsData.slice(0, 2).map((p) => ({ ...p, qty: 1 }));
+    return [];
   });
 
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
@@ -43,23 +43,85 @@ const Cart = () => {
   const [phone, setPhone] = useState(user?.phone || '9876543210');
   const [paymentMethod, setPaymentMethod] = useState('COD');
 
+  // Sync with MongoDB Cart on authentication
+  useEffect(() => {
+    const syncCartWithDB = async () => {
+      if (!isAuthenticated) return;
+      try {
+        const { data } = await api.get('/api/cart');
+        if (data.success && data.cart?.items?.length > 0) {
+          const dbItems = data.cart.items
+            .filter((i) => i.product)
+            .map((i) => ({
+              ...i.product,
+              _id: i.product._id,
+              qty: i.qty || 1,
+              price: i.product.price,
+              dummyprice: i.product.dummyprice,
+              title: i.product.title,
+            }));
+
+          setCartItems(dbItems);
+          localStorage.setItem('kisan_cart', JSON.stringify(dbItems));
+          window.dispatchEvent(new Event('cartUpdated'));
+        } else {
+          // If DB cart is empty but user has local items, sync local items to DB
+          const localSaved = JSON.parse(localStorage.getItem('kisan_cart') || '[]');
+          for (const item of localSaved) {
+            if (item._id) {
+              try {
+                await api.post('/api/cart/add', { productId: item._id, qty: item.qty || 1 });
+              } catch (e) {
+                // Ignore if item not found
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Could not sync cart with MongoDB:', err.message);
+      }
+    };
+
+    syncCartWithDB();
+  }, [isAuthenticated]);
+
   // Sync to localStorage
   useEffect(() => {
     localStorage.setItem('kisan_cart', JSON.stringify(cartItems));
     window.dispatchEvent(new Event('cartUpdated'));
   }, [cartItems]);
 
-  const updateQty = (id, delta) => {
+  const updateQty = async (id, delta) => {
+    const item = cartItems.find((i) => i._id === id);
+    if (!item) return;
+    const newQty = Math.max(1, (item.qty || 1) + delta);
+
     setCartItems((prev) =>
-      prev.map((item) =>
-        item._id === id ? { ...item, qty: Math.max(1, (item.qty || 1) + delta) } : item
+      prev.map((i) =>
+        i._id === id ? { ...i, qty: newQty } : i
       )
     );
+
+    if (isAuthenticated) {
+      try {
+        await api.patch('/api/cart/update', { productId: id, qty: newQty });
+      } catch (err) {
+        console.warn('MongoDB cart update failed:', err.message);
+      }
+    }
   };
 
-  const removeItem = (id) => {
+  const removeItem = async (id) => {
     setCartItems((prev) => prev.filter((item) => item._id !== id));
     toast.success('Item removed from cart');
+
+    if (isAuthenticated) {
+      try {
+        await api.delete(`/api/cart/remove/${id}`);
+      } catch (err) {
+        console.warn('MongoDB cart remove failed:', err.message);
+      }
+    }
   };
 
   const cleanPrice = (val) => {
@@ -95,22 +157,30 @@ const Cart = () => {
     setIsPlacingOrder(true);
 
     try {
-      // Place orders for each item or first item
+      // Place orders in MongoDB for all items
       for (const item of cartItems) {
-        // Only call backend if valid ObjectId or fallback to first dummy
-        const productId = item._id && item._id.length === 24 ? item._id : undefined;
-
-        if (productId) {
-          await api.post('/api/orders', {
-            productId,
-            Quantity: item.qty || 1,
-            DeliveryAddress: `${shippingAddress.trim()} (Phone: ${phone.trim()})`,
-            paymentMethod,
-          });
+        if (item._id) {
+          try {
+            await api.post('/api/orders', {
+              productId: item._id,
+              Quantity: item.qty || 1,
+              DeliveryAddress: `${shippingAddress.trim()} (Phone: ${phone.trim()})`,
+              paymentMethod,
+            });
+          } catch (itemErr) {
+            console.error('Order creation error for item:', item.title, itemErr.response?.data?.message || itemErr.message);
+          }
         }
       }
 
-      // Also save order to localStorage so it appears instantly on My Orders even if mock products were used
+      // Clear cart in MongoDB
+      try {
+        await api.delete('/api/cart/clear');
+      } catch (clearErr) {
+        console.warn('MongoDB cart clear failed:', clearErr.message);
+      }
+
+      // Also save order to localStorage for instant local access
       const existingOrders = JSON.parse(localStorage.getItem('kisan_my_orders') || '[]');
       const newOrders = cartItems.map((item) => ({
         _id: 'ord_' + Math.random().toString(36).substring(2, 9),
@@ -148,62 +218,21 @@ const Cart = () => {
       localStorage.setItem('kisan_received_requests', JSON.stringify([...newReceived, ...existingReceived]));
       window.dispatchEvent(new Event('requestReceivedUpdated'));
 
-      // Clear cart
+      // Clear local cart
       setCartItems([]);
       localStorage.removeItem('kisan_cart');
       setIsCheckoutOpen(false);
 
-      toast.success('🎉 Order placed successfully! Direct delivery initiated.');
+      toast.success('🎉 Order placed successfully! Saved to your orders in database.');
       navigate('/Myorder');
     } catch (err) {
       console.error('Checkout error:', err);
-      // Even if backend fails because dummy product IDs aren't ObjectIds in Mongo, create the order in local cache
-      const existingOrders = JSON.parse(localStorage.getItem('kisan_my_orders') || '[]');
-      const newOrders = cartItems.map((item) => ({
-        _id: 'ord_' + Math.random().toString(36).substring(2, 9),
-        product: item,
-        Quantity: item.qty || 1,
-        amount: cleanPrice(item.price) * (item.qty || 1),
-        DeliveryAddress: `${shippingAddress.trim()} (Phone: ${phone.trim()})`,
-        paymentMethod,
-        isPaid: paymentMethod !== 'COD',
-        status: 'confirmed',
-        createdAt: new Date().toISOString(),
-        showDeliveryTime: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString(),
-      }));
-
-      localStorage.setItem('kisan_my_orders', JSON.stringify([...newOrders, ...existingOrders]));
-
-      const existingReceived = JSON.parse(localStorage.getItem('kisan_received_requests') || '[]');
-      const newReceived = cartItems.map((item) => ({
-        _id: 'req_' + Math.random().toString(36).substring(2, 9),
-        product: item,
-        user: {
-          name: user?.name || shippingAddress.split(',')[0] || 'Customer',
-          phone: phone.trim(),
-          email: user?.email || 'buyer@kisan.com',
-        },
-        Quantity: item.qty || 1,
-        amount: cleanPrice(item.price) * (item.qty || 1),
-        DeliveryAddress: `${shippingAddress.trim()} (Phone: ${phone.trim()})`,
-        paymentMethod,
-        isPaid: paymentMethod !== 'COD',
-        status: 'pending',
-        createdAt: new Date().toISOString(),
-      }));
-      localStorage.setItem('kisan_received_requests', JSON.stringify([...newReceived, ...existingReceived]));
-      window.dispatchEvent(new Event('requestReceivedUpdated'));
-
-      setCartItems([]);
-      localStorage.removeItem('kisan_cart');
-      setIsCheckoutOpen(false);
-
-      toast.success('Order confirmed and recorded! Redirecting to orders...');
-      navigate('/Myorder');
+      toast.error('Failed to place order. Please try again.');
     } finally {
       setIsPlacingOrder(false);
     }
   };
+
 
   return (
     <div className="relative overflow-hidden min-h-screen">
