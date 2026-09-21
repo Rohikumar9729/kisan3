@@ -28,29 +28,23 @@ const Myorder = () => {
     try {
       setIsLoading(true);
 
-      // Fetch from API if logged in
-      let apiOrders = [];
+      // Fetch directly from MongoDB if authenticated
       if (isAuthenticated) {
         try {
           const { data } = await api.get('/api/orders/my');
-          if (data.success && data.orders?.length > 0) {
-            apiOrders = data.orders;
+          if (data.success && Array.isArray(data.orders)) {
+            setOrders(data.orders);
+            return;
           }
         } catch (e) {
           console.log('Error fetching my orders from API:', e);
         }
       }
 
-      // Check local storage orders
+      // Fallback only if not authenticated or offline
       const localOrders = JSON.parse(localStorage.getItem('kisan_my_orders') || '[]');
-
-      // Merge avoiding duplicates
-      const apiIds = new Set(apiOrders.map((o) => o._id));
-      const filteredLocal = localOrders.filter((o) => !apiIds.has(o._id));
-      const combined = [...apiOrders, ...filteredLocal];
-
-      if (combined.length > 0) {
-        setOrders(combined);
+      if (localOrders.length > 0) {
+        setOrders(localOrders);
       } else {
         // Fallback to dummy data mapped to our schema
         setOrders(

@@ -42,24 +42,22 @@ const ReceivedRequests = () => {
     try {
       setIsLoading(true);
 
-      let apiRequests = [];
+      // Fetch directly from MongoDB if authenticated
       if (isAuthenticated) {
         try {
           const { data } = await api.get('/api/orders/received');
-          if (data.success && data.orders) {
-            apiRequests = data.orders;
+          if (data.success && Array.isArray(data.orders)) {
+            setRequests(data.orders);
+            return;
           }
         } catch (err) {
           console.error('Error fetching received requests from API:', err);
         }
       }
 
-      // Check localStorage for local simulated requests
+      // Check localStorage only as a fallback
       const localRequests = JSON.parse(localStorage.getItem('kisan_received_requests') || '[]');
-      const apiIds = new Set(apiRequests.map((r) => r._id));
-      const merged = [...apiRequests, ...localRequests.filter((r) => !apiIds.has(r._id))];
-
-      setRequests(merged);
+      setRequests(localRequests);
     } finally {
       setIsLoading(false);
     }

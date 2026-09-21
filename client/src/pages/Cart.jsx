@@ -45,11 +45,14 @@ const Cart = () => {
 
   // Sync with MongoDB Cart on authentication
   useEffect(() => {
+    let isCancelled = false;
+
     const syncCartWithDB = async () => {
       if (!isAuthenticated) return;
       try {
         const { data } = await api.get('/api/cart');
-        if (data.success && data.cart?.items?.length > 0) {
+        if (isCancelled) return;
+        if (data.success && Array.isArray(data.cart?.items)) {
           const dbItems = data.cart.items
             .filter((i) => i.product)
             .map((i) => ({
@@ -64,18 +67,6 @@ const Cart = () => {
           setCartItems(dbItems);
           localStorage.setItem('kisan_cart', JSON.stringify(dbItems));
           window.dispatchEvent(new Event('cartUpdated'));
-        } else {
-          // If DB cart is empty but user has local items, sync local items to DB
-          const localSaved = JSON.parse(localStorage.getItem('kisan_cart') || '[]');
-          for (const item of localSaved) {
-            if (item._id) {
-              try {
-                await api.post('/api/cart/add', { productId: item._id, qty: item.qty || 1 });
-              } catch (e) {
-                // Ignore if item not found
-              }
-            }
-          }
         }
       } catch (err) {
         console.warn('Could not sync cart with MongoDB:', err.message);
@@ -83,6 +74,9 @@ const Cart = () => {
     };
 
     syncCartWithDB();
+    return () => {
+      isCancelled = true;
+    };
   }, [isAuthenticated]);
 
   // Sync to localStorage
@@ -143,6 +137,8 @@ const Cart = () => {
   const handleCheckoutSubmit = async (e) => {
     e.preventDefault();
 
+    if (isPlacingOrder) return;
+
     if (!shippingAddress.trim() || !phone.trim()) {
       toast.error('Please enter delivery address and phone number');
       return;
@@ -180,50 +176,17 @@ const Cart = () => {
         console.warn('MongoDB cart clear failed:', clearErr.message);
       }
 
-      // Also save order to localStorage for instant local access
-      const existingOrders = JSON.parse(localStorage.getItem('kisan_my_orders') || '[]');
-      const newOrders = cartItems.map((item) => ({
-        _id: 'ord_' + Math.random().toString(36).substring(2, 9),
-        product: item,
-        Quantity: item.qty || 1,
-        amount: cleanPrice(item.price) * (item.qty || 1),
-        DeliveryAddress: `${shippingAddress.trim()} (Phone: ${phone.trim()})`,
-        paymentMethod,
-        isPaid: paymentMethod !== 'COD',
-        status: 'confirmed',
-        createdAt: new Date().toISOString(),
-        showDeliveryTime: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString(),
-      }));
-
-      localStorage.setItem('kisan_my_orders', JSON.stringify([...newOrders, ...existingOrders]));
-
-      // Also record as a received buy request for seller notification
-      const existingReceived = JSON.parse(localStorage.getItem('kisan_received_requests') || '[]');
-      const newReceived = cartItems.map((item) => ({
-        _id: 'req_' + Math.random().toString(36).substring(2, 9),
-        product: item,
-        user: {
-          name: user?.name || shippingAddress.split(',')[0] || 'Customer',
-          phone: phone.trim(),
-          email: user?.email || 'buyer@kisan.com',
-        },
-        Quantity: item.qty || 1,
-        amount: cleanPrice(item.price) * (item.qty || 1),
-        DeliveryAddress: `${shippingAddress.trim()} (Phone: ${phone.trim()})`,
-        paymentMethod,
-        isPaid: paymentMethod !== 'COD',
-        status: 'pending',
-        createdAt: new Date().toISOString(),
-      }));
-      localStorage.setItem('kisan_received_requests', JSON.stringify([...newReceived, ...existingReceived]));
+      // Clean local storage so no mock duplicate orders persist
+      localStorage.removeItem('kisan_my_orders');
+      localStorage.removeItem('kisan_received_requests');
+      localStorage.removeItem('kisan_cart');
+      setCartItems([]);
+      window.dispatchEvent(new Event('cartUpdated'));
       window.dispatchEvent(new Event('requestReceivedUpdated'));
 
-      // Clear local cart
-      setCartItems([]);
-      localStorage.removeItem('kisan_cart');
       setIsCheckoutOpen(false);
 
-      toast.success('🎉 Order placed successfully! Saved to your orders in database.');
+      toast.success('🎉 Order placed successfully! Saved to database.');
       navigate('/Myorder');
     } catch (err) {
       console.error('Checkout error:', err);
