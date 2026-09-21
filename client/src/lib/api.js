@@ -4,9 +4,11 @@ import axios from 'axios';
  * Pre-configured axios instance for the Kisan API with automatic JWT bearer token attachment.
  */
 const rawBackendUrl = import.meta.env.VITE_BACKEND_URL;
-const backendUrl = rawBackendUrl
-  ? rawBackendUrl.replace(/\/+$/, '')
-  : (import.meta.env.DEV ? 'http://localhost:4000' : '');
+
+// In development, connect to localhost:4000. In production, use same-domain relative path ''
+const backendUrl = import.meta.env.DEV
+  ? (rawBackendUrl || 'http://localhost:4000').replace(/\/+$/, '')
+  : (rawBackendUrl && !rawBackendUrl.includes('localhost') ? rawBackendUrl.replace(/\/+$/, '') : '');
 
 const api = axios.create({
   baseURL: backendUrl,
